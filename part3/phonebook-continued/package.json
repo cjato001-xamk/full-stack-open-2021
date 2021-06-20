@@ -1,0 +1,17 @@
+{
+  "name": "fso-2021-phonebook",
+  "version": "1.0.0",
+  "main": "server/build/index.js",
+  "author": "Janne Toikander <janne.toikander@gmail.com>",
+  "scripts": {
+    "start": "node server/build/index.js",
+    "build": "cd client/ && yarn install && yarn build && cd ../server && yarn install"
+  },
+  "cacheDirectories": [
+    "server/node_modules",
+    "client/node_modules"
+  ],
+  "dependencies": {
+    "mongoose": "^5.12.14"
+  }
+}
