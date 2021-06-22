@@ -6,8 +6,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon",
-    "build": "tsc",
-    "postinstall": "yarn run build",
+    "build": "./node_modules/.bin/tsc",
+    "ib:server": "YARN_PRODUCTION=false yarn install && yarn run build",
     "start": "node build/index.js",
     "lint": "eslint ./src --ext .ts",
     "lint:watch": "esw ./src --ext .ts -w --color"

@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "main": "server/build/index.js",
   "author": "Janne Toikander <janne.toikander@gmail.com>",
+  "license": "MIT",
   "scripts": {
     "start": "node server/build/index.js",
-    "build": "cd client/ && yarn install && yarn build && cd ../server && yarn install"
+    "build": "cd client && yarn run ib:client && cd ../server && yarn run ib:server"
   },
   "cacheDirectories": [
     "server/node_modules",
