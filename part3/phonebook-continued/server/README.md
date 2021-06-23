@@ -30,9 +30,6 @@ yarn run dev
 yarn run lint
 - eslint
 
-yarn run test
-- run Jest tests (there ain't any working ones)
-
 yarn run build
 - make production build
 

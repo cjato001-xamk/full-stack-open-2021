@@ -6,7 +6,7 @@ The app can be accessed at https://fso-2021-phonebook.herokuapp.com/
 
 ## Setup dev env
 
-See README's in [client](client/README.md) and [server](server/README.md).
+See README's in [client](client/README.md) and [server](server/README.md) and setup accordingly.
 
 ## Heroku deployment instructions
 
@@ -36,13 +36,14 @@ $ git add .
 $ git commit -m "Final commit"
 
 # Push only this app from the repo to Heroku
+# This command must ran from root of the repo
 $ git subtree push --prefix part3/phonebook-continued heroku main
 ```
 
 ### Heroku process
 
-When app is deployed to Heroku, Heroku runs the root folder's `yarn run build` which builds react app into server/public -directory and transpiles the backend into server/build.
+When app is deployed to Heroku, Heroku runs the root folder's `yarn run build` which in turn runs the scripts for the client and server. Client builds react app into server/public -directory. Backend is built into server/build.
 
 Heroku starts the app from running the root folder's `yarn run start` which starts the transpiled app from the server/build/index.js.
 
-The backend uses the /server/public as the server's public folder.
+The backend uses the /server/public as the server's public folder, ie. that's what you see in the browser.
