@@ -1,4 +1,5 @@
 import express, { Application, Request } from 'express'
+import 'express-async-errors'
 import helmet from 'helmet'
 import cors from 'cors'
 import morgan from 'morgan'

@@ -2,10 +2,14 @@
 
 const logger = {
   info: (...params: unknown[]): void => {
-    console.log(...params)
+    if (process.env.NODE_ENV !== 'test') {
+      console.log(...params)
+    }
   },
   error: (...params: unknown[]): void => {
-    console.error(...params)
+    if (process.env.NODE_ENV !== 'test') {
+      console.error(...params)
+    }
   },
 }
 

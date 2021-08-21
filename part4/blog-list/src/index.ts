@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3001
 // Mongoose connect
 mongoose
   .connect(<string>process.env.MONGODB_URI, {
+    dbName: <string>process.env.MONGODB_DB_NAME,
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
