@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "rootDir": "./src",
+    "outDir": "./build",
+    "target": "ES6",
+    "module": "CommonJS",
+    "lib": ["es6", "dom", "esnext.asynciterable"],
+    "types": ["node", "jest"],
+    "moduleResolution": "node",
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "typeRoots": ["@types", "node_modules/@types"]
+  },
+  "exclude": ["node_modules", "build", "src/**/*.test.ts", "src/tests/**/*"],
+  "include": ["./src/**/*.ts"]
+}
