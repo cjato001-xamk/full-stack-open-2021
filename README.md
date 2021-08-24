@@ -12,6 +12,7 @@ The "Full Stack Open 2021"-course serves as an introduction to modern web applic
 - [x] [Part 1: Introduction to React](https://github.com/cjato001-xamk/full-stack-open-2021/tree/main/part1)
 - [x] [Part 2: Communicating with server](https://github.com/cjato001-xamk/full-stack-open-2021/tree/main/part2)
 - [x] [Part 3: Programming a server with NodeJS and Express](https://github.com/cjato001-xamk/full-stack-open-2021/tree/main/part3)
+- [x] [Part 4: Testing Express servers, user administration](https://github.com/cjato001-xamk/full-stack-open-2021/tree/main/part4/blog-list)
 
 ### Completed exercises
 
@@ -21,10 +22,10 @@ The "Full Stack Open 2021"-course serves as an introduction to modern web applic
 | Part 1 | 14/14     |
 | Part 2 | 20/20     |
 | Part 3 | 22/22     |
+| Part 4 | 23/23     |
 
 ## Remaining parts
 
-- [ ] Part 4: Testing Express servers, user administration
 - [ ] Part 5: Testing React apps
 - [ ] Part 6: State management with Redux
 - [ ] Part 7: React router, custom hooks, styling app with CSS and webpack
