@@ -1,4 +1,4 @@
-import { model, Schema, SchemaDefinitionProperty } from 'mongoose'
+import mongoose, { model, Schema, SchemaDefinitionProperty } from 'mongoose'
 import uniqueValidator from 'mongoose-unique-validator'
 
 import { IBlog, IBlogDoc } from '../interfaces/IBlog'
@@ -20,6 +20,10 @@ const blogSchemaFields: Record<keyof IBlog, SchemaDefinitionProperty> = {
     type: Number,
     required: true,
     default: 0,
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
   },
 }
 
