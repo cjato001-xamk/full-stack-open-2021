@@ -12,6 +12,7 @@ export interface IBlog {
 export interface IBlogDoc extends IBlog, mongoose.Document {}
 
 export interface IBlogClient {
+  id?: string
   title: string
   author: string
   url: string
