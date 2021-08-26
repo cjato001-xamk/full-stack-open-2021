@@ -4,7 +4,10 @@ export interface IBlog {
   author: string
   url: string
   likes: number
-  user: string
+  user: {
+    username: string
+    name: string
+  }
 }
 
 export type ICreateBlog = Pick<IBlog, 'title' | 'author' | 'url'>
