@@ -10,10 +10,12 @@ describe('Blog component', () => {
       url: '',
       likes: 0,
       user: {
+        id: '',
         username: '',
         name: '',
       },
     }
+
     render(
       <Blog
         blog={mockBlog}

@@ -7,6 +7,7 @@ describe('Notification component', () => {
       message: 'test-message',
       type: 'test-type',
     }
+
     render(
       <Notification
         notification={mockNotification}
