@@ -6,11 +6,13 @@ import { INotification } from '../interfaces/INotification'
 type CreateBlogProps = {
   refreshBlogs: () => void
   setNotification: React.Dispatch<React.SetStateAction<INotification>>
+  setShowCreateBlog: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const CreateBlog = ({
   refreshBlogs,
   setNotification,
+  setShowCreateBlog,
 }: CreateBlogProps): JSX.Element => {
   const [title, setTitle] = useState<string>('')
   const [author, setAuthor] = useState<string>('')
@@ -37,6 +39,8 @@ const CreateBlog = ({
         setUrl('')
 
         refreshBlogs()
+
+        setShowCreateBlog(false)
       })
       .catch((error) => {
         setNotification({
@@ -85,6 +89,7 @@ const CreateBlog = ({
         <button type='submit' disabled={isSubmitting}>
           {!isSubmitting ? 'Create' : 'Creating...'}
         </button>
+        <button onClick={(): void => setShowCreateBlog(false)}>Close</button>
       </form>
     </>
   )

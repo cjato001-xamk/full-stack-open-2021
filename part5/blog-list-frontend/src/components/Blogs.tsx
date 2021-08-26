@@ -15,6 +15,7 @@ type BlogsProps = {
 const Blogs = ({ setNotification }: BlogsProps): JSX.Element => {
   const [blogs, setBlogs] = useState<IBlog[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [showCreateBlog, setShowCreateBlog] = useState<boolean>(false)
 
   useEffect(() => {
     refreshBlogs()
@@ -44,7 +45,22 @@ const Blogs = ({ setNotification }: BlogsProps): JSX.Element => {
 
   return (
     <div>
-      <h2>Blogs</h2>
+      <h2>
+        Blogs{' '}
+        {!showCreateBlog && (
+          <button onClick={(): void => setShowCreateBlog(true)}>
+            + create new
+          </button>
+        )}
+      </h2>
+
+      {showCreateBlog && (
+        <CreateBlog
+          refreshBlogs={refreshBlogs}
+          setNotification={setNotification}
+          setShowCreateBlog={setShowCreateBlog}
+        />
+      )}
 
       {isLoading ? (
         <Loading />
@@ -55,11 +71,6 @@ const Blogs = ({ setNotification }: BlogsProps): JSX.Element => {
           ))}
         </>
       )}
-
-      <CreateBlog
-        refreshBlogs={refreshBlogs}
-        setNotification={setNotification}
-      />
     </div>
   )
 }
