@@ -20,9 +20,25 @@ const create = async (
   })
 }
 
+const like = async (update: {
+  id: string
+  likes: number
+}): Promise<AxiosResponse<IApiResponse<IBlog>>> => {
+  return await axios.patch(
+    `${baseUrl}/${update.id}`,
+    { likes: update.likes },
+    {
+      headers: {
+        Authorization: `Bearer ${authService.getToken()}`,
+      },
+    }
+  )
+}
+
 const blogService = {
   getAll,
   create,
+  like,
 }
 
 export { blogService }

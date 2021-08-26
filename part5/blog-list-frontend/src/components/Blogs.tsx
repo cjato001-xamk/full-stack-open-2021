@@ -62,12 +62,17 @@ const Blogs = ({ setNotification }: BlogsProps): JSX.Element => {
         />
       )}
 
-      {isLoading ? (
+      {isLoading && blogs.length === 0 ? (
         <Loading />
       ) : (
         <>
           {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
+            <Blog
+              key={blog.id}
+              blog={blog}
+              setNotification={setNotification}
+              refreshBlogs={refreshBlogs}
+            />
           ))}
         </>
       )}
