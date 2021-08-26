@@ -5,6 +5,7 @@ export interface IBlog {
   url: string
   likes: number
   user: {
+    id: string
     username: string
     name: string
   }

@@ -47,7 +47,7 @@ auth.post(
     })
 
     return res.status(200).send({
-      data: { token, username: user.username, name: user.name },
+      data: { token, id: user._id, username: user.username, name: user.name },
     })
   }
 )

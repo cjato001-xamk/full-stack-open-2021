@@ -35,10 +35,21 @@ const like = async (update: {
   )
 }
 
+const remove = async (
+  id: string
+): Promise<AxiosResponse<IApiResponse<IBlog>>> => {
+  return await axios.delete(`${baseUrl}/${id}`, {
+    headers: {
+      Authorization: `Bearer ${authService.getToken()}`,
+    },
+  })
+}
+
 const blogService = {
   getAll,
   create,
   like,
+  remove,
 }
 
 export { blogService }

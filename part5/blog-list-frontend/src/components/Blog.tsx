@@ -2,7 +2,10 @@ import { useState } from 'react'
 
 import { IBlog } from '../interfaces/IBlog'
 import { INotification } from '../interfaces/INotification'
+import { authService } from '../services/auth'
 import { blogService } from '../services/blogs'
+
+import { RemoveBlogButton } from './RemoveBlogButton'
 
 type BlogProps = {
   blog: IBlog
@@ -17,6 +20,8 @@ const Blog = ({
 }: BlogProps): JSX.Element => {
   const [showBlogDetails, setShowBlogDetails] = useState<boolean>(false)
   const [isLiking, setIsLiking] = useState<boolean>(false)
+
+  const user = authService.getUser()
 
   const like = (): void => {
     setIsLiking(true)
@@ -52,16 +57,26 @@ const Blog = ({
         {showBlogDetails ? 'Hide' : 'Show'} details
       </button>
       {showBlogDetails && (
-        <ul>
-          <li>{blog.url}</li>
-          <li>
-            Likes: {blog.likes}{' '}
-            <button onClick={like} disabled={isLiking}>
-              {!isLiking ? 'Like' : 'Liking...'}
-            </button>
-          </li>
-          <li>{blog.user.name}</li>
-        </ul>
+        <>
+          <ul>
+            <li>{blog.url}</li>
+            <li>
+              Likes: {blog.likes}{' '}
+              <button onClick={like} disabled={isLiking}>
+                {!isLiking ? 'Like' : 'Liking...'}
+              </button>
+            </li>
+            <li>{blog.user.name}</li>
+          </ul>
+
+          {user?.id && user.id === blog.user.id && (
+            <RemoveBlogButton
+              blog={blog}
+              setNotification={setNotification}
+              refreshBlogs={refreshBlogs}
+            />
+          )}
+        </>
       )}
     </div>
   )
