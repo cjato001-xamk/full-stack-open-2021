@@ -28,7 +28,7 @@ const Blogs = ({ setNotification }: BlogsProps): JSX.Element => {
     blogService
       .getAll()
       .then((response) => {
-        setBlogs(response.data.data || [])
+        setBlogs(response.data.data?.sort((a, b) => b.likes - a.likes) || [])
 
         setIsLoading(false)
       })
