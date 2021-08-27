@@ -4,6 +4,7 @@ import { IBlog } from '../interfaces/IBlog'
 import { INotification } from '../interfaces/INotification'
 import { authService } from '../services/auth'
 import { blogService } from '../services/blogs'
+import { LikeButton } from './LikeButton'
 
 import { RemoveBlogButton } from './RemoveBlogButton'
 
@@ -61,10 +62,7 @@ const Blog = ({
           <ul>
             <li>{blog.url}</li>
             <li>
-              Likes: {blog.likes}{' '}
-              <button onClick={like} disabled={isLiking}>
-                {!isLiking ? 'Like' : 'Liking...'}
-              </button>
+              Likes: {blog.likes} <LikeButton like={like} isLiking={isLiking} />
             </li>
             <li>{blog.user.name}</li>
           </ul>
