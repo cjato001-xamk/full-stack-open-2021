@@ -36,4 +36,28 @@ describe('Blog app', () => {
       cy.get('html').should('not.contain', 'You are logged in as')
     })
   })
+
+  describe('when logged in', function () {
+    beforeEach(function () {
+      cy.login({ username: 'test-user', password: 'test-password' })
+    })
+
+    it.only('a blog can be created', function () {
+      cy.contains('button', '+ Create new').click()
+      cy.contains('h2', 'Create new blog')
+
+      cy.get('input[name="title"]').type('test-title')
+      cy.get('input[name="author"]').type('test-author')
+      cy.get('input[name="url"]').type('test-url')
+
+      cy.contains('button', 'Create').click()
+
+      cy.get('.success').should(
+        'contain',
+        'A new blog "test-title" by "test-author" added.'
+      )
+
+      cy.get('div').should('contain', 'test-title test-author')
+    })
+  })
 })

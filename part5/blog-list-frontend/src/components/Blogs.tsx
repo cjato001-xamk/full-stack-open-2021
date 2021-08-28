@@ -49,7 +49,7 @@ const Blogs = ({ setNotification }: BlogsProps): JSX.Element => {
         Blogs{' '}
         {!showCreateBlog && (
           <button onClick={(): void => setShowCreateBlog(true)}>
-            + create new
+            + Create new
           </button>
         )}
       </h2>
