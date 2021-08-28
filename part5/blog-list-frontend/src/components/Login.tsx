@@ -58,7 +58,7 @@ const Login = ({ setUser, setNotification }: LoginProps): JSX.Element => {
           <input
             type='text'
             value={username}
-            name='Username'
+            name='username'
             onChange={({ target }): void => setUsername(target.value)}
           />
         </div>
@@ -67,7 +67,7 @@ const Login = ({ setUser, setNotification }: LoginProps): JSX.Element => {
           <input
             type='password'
             value={password}
-            name='Password'
+            name='password'
             onChange={({ target }): void => setPassword(target.value)}
           />
         </div>
