@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 
 import { User } from '../models/user'
+import { config } from '../helpers/config'
 
 const tokenExtractor = (
   req: Request,
@@ -14,9 +15,7 @@ const tokenExtractor = (
     ? authorization.substring(7)
     : null
 
-  req.decodedToken = req.token
-    ? jwt.verify(req.token, <string>process.env.JWT_SECRET)
-    : null
+  req.decodedToken = req.token ? jwt.verify(req.token, config.JWT_SECRET) : null
 
   next()
 }

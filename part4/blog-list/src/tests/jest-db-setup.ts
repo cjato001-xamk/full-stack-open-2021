@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 
 import { logger } from '../helpers/logger'
+import { config } from '../helpers/config'
 
 mongoose.Promise = global.Promise
 
@@ -41,7 +42,7 @@ const setupTestDatabase = (databaseName: string): void => {
   // Connect to Mongoose
   beforeAll(async () => {
     try {
-      await mongoose.connect(<string>process.env.MONGODB_URI, {
+      await mongoose.connect(config.MONGODB_URI, {
         dbName: databaseName,
         useNewUrlParser: true,
         useUnifiedTopology: true,

@@ -12,7 +12,8 @@
     "lint:watch": "esw ./src --ext .ts -w --color",
     "test": "NODE_ENV=test jest --runInBand",
     "test:watch": "NODE_ENV=test jest --watch --detectOpenHandles --verbose --runInBand",
-    "test:clear": "jest --clearCache"
+    "test:clear": "jest --clearCache",
+    "cypress:backend": "NODE_ENV=test nodemon"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",

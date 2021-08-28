@@ -3,8 +3,9 @@ import axios, { AxiosResponse } from 'axios'
 import { authService } from './auth'
 import { IBlog, ICreateBlog } from '../interfaces/IBlog'
 import { IApiResponse } from '../interfaces/IApiResponse'
+import { config } from '../helpers/config'
 
-const baseUrl = `${process.env.REACT_APP_API_END_POINT}/blogs`
+const baseUrl = `${config.API_BASE_URL}/blogs`
 
 const getAll = async (): Promise<AxiosResponse<IApiResponse<IBlog[]>>> => {
   return await axios.get<IApiResponse<IBlog[]>>(baseUrl)

@@ -20,9 +20,15 @@
     "dev": "PORT=3132 react-scripts start",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "react-scripts test",
+    "test:cypress:ui": "start-server-and-test cypress:backend http://localhost:3131/api/status cypress:frontend 3134 'yarn run cypress:open'",
+    "test:cypress:headless": "start-server-and-test cypress:backend http://localhost:3131/api/status cypress:frontend 3134 'yarn run cypress:run'",
+    "cypress:backend": "yarn --cwd ../../part4/blog-list/ cypress:backend",
+    "cypress:frontend": "PORT=3134 BROWSER=none react-scripts start",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "browserslist": {
     "production": [
@@ -37,6 +43,9 @@
     ]
   },
   "devDependencies": {
-    "eslint-plugin-jest": "^24.4.0"
+    "cypress": "^8.3.1",
+    "eslint-plugin-cypress": "^2.11.3",
+    "eslint-plugin-jest": "^24.4.0",
+    "start-server-and-test": "^1.13.1"
   }
 }

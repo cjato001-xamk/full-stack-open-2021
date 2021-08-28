@@ -2,13 +2,12 @@ import mongoose from 'mongoose'
 
 import { app } from './app'
 import { logger } from './helpers/logger'
-
-const PORT = process.env.PORT || 3001
+import { config } from './helpers/config'
 
 // Mongoose connect
 mongoose
-  .connect(<string>process.env.MONGODB_URI, {
-    dbName: <string>process.env.MONGODB_DB_NAME,
+  .connect(config.MONGODB_URI, {
+    dbName: config.MONGODB_DB_NAME,
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -17,11 +16,13 @@ mongoose
   .then(() => {
     logger.info('MongoDB connected.')
 
-    app.listen(<string>PORT, () => {
-      logger.info(`Server listening on ${PORT}`)
+    app.listen(config.PORT, () => {
+      logger.info(
+        `Server listening on ${config.PORT}, NODE_ENV is ${config.NODE_ENV}.`
+      )
 
-      if (process.env.NODE_ENV === 'development') {
-        logger.info(`App can be accessed at http://localhost:${PORT}`)
+      if (config.NODE_ENV === 'development') {
+        logger.info(`App can be accessed at http://localhost:${config.PORT}`)
       }
     })
   })

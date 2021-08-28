@@ -2,8 +2,9 @@ import axios, { AxiosResponse } from 'axios'
 
 import { IUser } from '../interfaces/IUser'
 import { IApiResponse } from '../interfaces/IApiResponse'
+import { config } from '../helpers/config'
 
-const baseUrl = `${process.env.REACT_APP_API_END_POINT}/auth`
+const baseUrl = `${config.API_BASE_URL}/auth`
 
 const login = async (credentials: {
   username: string

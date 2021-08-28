@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt'
 import { IApiResponse } from '../../interfaces/IApiResponse'
 import { IUserClient } from '../../interfaces/IUser'
 import { User } from '../../models/user'
+import { config } from '../../helpers/config'
 
 const auth = express.Router()
 
@@ -42,7 +43,7 @@ auth.post(
       id: user._id,
     }
 
-    const token = jwt.sign(userForToken, <string>process.env.JWT_SECRET, {
+    const token = jwt.sign(userForToken, config.JWT_SECRET, {
       expiresIn: 60 * 60,
     })
 
