@@ -23,7 +23,7 @@ declare global {
 
       /**
        * Custom command to login given user
-       * @example login({username: 'test', password: 'test'})
+       * @example cy.login({username: 'test', password: 'test'})
        */
       login({
         username,
@@ -31,6 +31,20 @@ declare global {
       }: {
         username: string
         password: string
+      }): void
+
+      /**
+       * Custom command for creating a blog
+       * @example cy.createBlog({title:'test-title', author: 'test-author', url:'test-url'})
+       */
+      createBlog({
+        title,
+        author,
+        url,
+      }: {
+        title: string
+        author: string
+        url: string
       }): void
     }
   }
