@@ -69,7 +69,7 @@ describe('Blog app', () => {
         })
       })
 
-      it.only('a blog can be liked', () => {
+      it('a blog can be liked', () => {
         cy.contains('button', 'Show details').click()
 
         cy.get('li').should('contain', 'Likes: 0')
@@ -78,6 +78,15 @@ describe('Blog app', () => {
         cy.get('button').should('contain', 'Liking...')
 
         cy.get('li').should('contain', 'Likes: 1')
+      })
+
+      it('a blog creator can remove a blog', () => {
+        cy.contains('button', 'Show details').click()
+        cy.contains('button', 'Remove').click()
+        cy.get('span').should('contain', 'Are you sure?')
+        cy.contains('button', 'Yes').click()
+
+        cy.get('.success').should('contain', 'Blog "test-title" removed.')
       })
     })
   })
