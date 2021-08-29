@@ -75,7 +75,6 @@ describe('Blog app', () => {
         cy.get('li').should('contain', 'Likes: 0')
 
         cy.contains('button', 'Like').click()
-        cy.get('button').should('contain', 'Liking...')
 
         cy.get('li').should('contain', 'Likes: 1')
       })
@@ -87,6 +86,22 @@ describe('Blog app', () => {
         cy.contains('button', 'Yes').click()
 
         cy.get('.success').should('contain', 'Blog "test-title" removed.')
+      })
+
+      it('a blog cannot be removed by a non-creator', () => {
+        cy.createUser({
+          username: 'test-user-2',
+          name: 'test-name-2',
+          password: 'test-password-2',
+        })
+
+        cy.contains('button', 'Logout').click()
+
+        cy.login({ username: 'test-user-2', password: 'test-password-2' })
+
+        cy.contains('button', 'Show details').click()
+
+        cy.contains('button', 'Remove').should('not.exist')
       })
     })
   })
