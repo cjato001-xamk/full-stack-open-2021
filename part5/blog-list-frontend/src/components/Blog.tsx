@@ -53,10 +53,12 @@ const Blog = ({
         marginBottom: 2,
       }}
     >
-      {blog.title} {blog.author}{' '}
-      <button onClick={(): void => setShowBlogDetails(!showBlogDetails)}>
-        {showBlogDetails ? 'Hide' : 'Show'} details
-      </button>
+      <span className='header'>
+        {blog.title} {blog.author}{' '}
+        <button onClick={(): void => setShowBlogDetails(!showBlogDetails)}>
+          {showBlogDetails ? 'Hide' : 'Show'} details
+        </button>
+      </span>
       {showBlogDetails && (
         <>
           <ul>

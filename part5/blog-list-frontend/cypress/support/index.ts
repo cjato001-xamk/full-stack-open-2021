@@ -41,10 +41,12 @@ declare global {
         title,
         author,
         url,
+        visit,
       }: {
         title: string
         author: string
         url: string
+        visit?: boolean
       }): void
     }
   }

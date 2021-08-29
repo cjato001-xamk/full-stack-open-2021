@@ -16,7 +16,7 @@ Cypress.Commands.add('login', ({ username, password }) => {
   })
 })
 
-Cypress.Commands.add('createBlog', ({ title, author, url }) => {
+Cypress.Commands.add('createBlog', ({ title, author, url, visit = true }) => {
   cy.request({
     url: 'http://localhost:3133/api/blogs',
     method: 'POST',
@@ -25,6 +25,8 @@ Cypress.Commands.add('createBlog', ({ title, author, url }) => {
       Authorization: `Bearer ${JSON.parse(localStorage.getItem('user')).token}`,
     },
   }).then(() => {
-    cy.visit('http://localhost:3134')
+    if (visit) {
+      cy.visit('http://localhost:3134')
+    }
   })
 })

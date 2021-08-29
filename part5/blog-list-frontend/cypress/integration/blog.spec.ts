@@ -104,5 +104,88 @@ describe('Blog app', () => {
         cy.contains('button', 'Remove').should('not.exist')
       })
     })
+
+    describe('when multiple blogs exist', () => {
+      beforeEach(() => {
+        for (let i = 1; i < 5; i++) {
+          cy.createBlog({
+            title: `test-title-${i}`,
+            author: `test-author-${i}`,
+            url: `test-url-${i}`,
+            visit: i === 4,
+          })
+        }
+      })
+
+      it('blogs should be sorted by likes, most likes first', () => {
+        // Open details for test-3
+        cy.contains('#blogs div span.header', 'test-title-3')
+          .contains('button', 'Show details')
+          .click()
+
+        // Like test-3
+        cy.contains('li', 'test-url-3')
+          .next('li')
+          .contains('button', 'Like')
+          .click()
+
+        // Wait for the updates
+        cy.contains('button', 'Liking...').should('not.exist')
+        cy.contains('p', 'Updating bloglist...').should('not.exist')
+
+        // test-3 should be first in list
+        cy.get('#blogs>div').eq(0).should('contain', 'test-title-3')
+
+        // Open details for test-2
+        cy.contains('#blogs div span.header', 'test-title-2')
+          .contains('button', 'Show details')
+          .click()
+
+        // Like test-2
+        cy.contains('li', 'test-url-2')
+          .next('li')
+          .contains('button', 'Like')
+          .click()
+        // Wait for the updates
+        cy.contains('button', 'Liking...').should('not.exist')
+        cy.contains('p', 'Updating bloglist...').should('not.exist')
+
+        // Like test-2 again
+        cy.contains('li', 'test-url-2')
+          .next('li')
+          .contains('button', 'Like')
+          .click()
+
+        // Wait for the updates
+        cy.contains('button', 'Liking...').should('not.exist')
+        cy.contains('p', 'Updating bloglist...').should('not.exist')
+
+        // test-2 should be first in list
+        cy.get('#blogs>div').eq(0).should('contain', 'test-title-2')
+        // test-2 should have 2 likes
+        cy.contains('li', 'test-url-2').next('li').contains('Likes: 2')
+
+        // test-3 should be second in list
+        cy.get('#blogs>div').eq(1).should('contain', 'test-title-3')
+        // test-3 should have 1 like
+        cy.contains('li', 'test-url-3').next('li').contains('Likes: 1')
+
+        // third item in the list should have 0 likes
+        cy.get('#blogs>div').eq(2).contains('button', 'Show details').click()
+        cy.get('#blogs>div')
+          .eq(2)
+          .contains('li', 'test-url-')
+          .next('li')
+          .contains('Likes: 0')
+
+        // fourth item in the list should have 0 likes
+        cy.get('#blogs>div').eq(3).contains('button', 'Show details').click()
+        cy.get('#blogs>div')
+          .eq(3)
+          .contains('li', 'test-url-')
+          .next('li')
+          .contains('Likes: 0')
+      })
+    })
   })
 })

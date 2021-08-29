@@ -66,14 +66,17 @@ const Blogs = ({ setNotification }: BlogsProps): JSX.Element => {
         <Loading />
       ) : (
         <>
-          {blogs.map((blog) => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              setNotification={setNotification}
-              refreshBlogs={refreshBlogs}
-            />
-          ))}
+          <div id='blogs'>
+            {blogs.map((blog) => (
+              <Blog
+                key={blog.id}
+                blog={blog}
+                setNotification={setNotification}
+                refreshBlogs={refreshBlogs}
+              />
+            ))}
+          </div>
+          {isLoading && <p>Updating bloglist...</p>}
         </>
       )}
     </div>
