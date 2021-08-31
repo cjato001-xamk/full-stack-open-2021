@@ -4,7 +4,7 @@ import { counterReducer } from './reducer'
 describe('Unicafe counterReducer', () => {
   const initialState = {
     good: 0,
-    ok: 0,
+    neutral: 0,
     bad: 0,
   }
 
@@ -28,14 +28,14 @@ describe('Unicafe counterReducer', () => {
     const newState = counterReducer(state, action)
     expect(newState).toEqual({
       good: 1,
-      ok: 0,
+      neutral: 0,
       bad: 0,
     })
   })
 
-  it('should increment OK', () => {
+  it('should increment NEUTRAL', () => {
     const action = {
-      type: 'OK',
+      type: 'NEUTRAL',
     }
 
     const state = initialState
@@ -44,7 +44,7 @@ describe('Unicafe counterReducer', () => {
     const newState = counterReducer(state, action)
     expect(newState).toEqual({
       good: 0,
-      ok: 1,
+      neutral: 1,
       bad: 0,
     })
   })
@@ -60,19 +60,19 @@ describe('Unicafe counterReducer', () => {
     const newState = counterReducer(state, action)
     expect(newState).toEqual({
       good: 0,
-      ok: 0,
+      neutral: 0,
       bad: 1,
     })
   })
 
-  it('should reset all with action ZERO', () => {
+  it('should RESET all', () => {
     const action = {
-      type: 'ZERO',
+      type: 'RESET',
     }
 
     const state = {
       good: 1,
-      ok: 2,
+      neutral: 2,
       bad: 3,
     }
 
@@ -80,7 +80,7 @@ describe('Unicafe counterReducer', () => {
     const newState = counterReducer(state, action)
     expect(newState).toEqual({
       good: 0,
-      ok: 0,
+      neutral: 0,
       bad: 0,
     })
   })
