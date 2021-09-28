@@ -39,8 +39,7 @@ const anecdoteReducer = (state = initialState, action) => {
 
     case 'ADD_ANECDOTE':
       console.log('adding')
-      state.push(asObject(action.data.anecdote))
-      return state
+      return state.concat(asObject(action.data.anecdote))
 
     default:
       console.log('type did not match', action.type)
