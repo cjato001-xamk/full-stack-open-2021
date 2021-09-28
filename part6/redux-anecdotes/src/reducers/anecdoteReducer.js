@@ -37,7 +37,13 @@ const anecdoteReducer = (state = initialState, action) => {
         anecdote.id !== id ? anecdote : changedAnecdote
       )
 
+    case 'ADD_ANECDOTE':
+      console.log('adding')
+      state.push(asObject(action.data.anecdote))
+      return state
+
     default:
+      console.log('type did not match', action.type)
       return state
   }
 }
@@ -49,4 +55,11 @@ const vote = (id) => {
   }
 }
 
-export { anecdoteReducer, vote, initialState }
+const addAnecdote = (anecdote) => {
+  return {
+    type: 'ADD_ANECDOTE',
+    data: { anecdote },
+  }
+}
+
+export { anecdoteReducer, vote, initialState, addAnecdote }
