@@ -1,6 +1,6 @@
 const initialState = {
-  type: 'success',
-  message: 'test-message',
+  type: null,
+  message: null,
 }
 
 const notificationReducer = (state = initialState, action) => {
