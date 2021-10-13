@@ -10,8 +10,14 @@ const notificationReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case 'ADD_NOTIFICATION':
-      console.log('TODO add')
-      return state
+      return {
+        ...state,
+        type: action.data.notification.type || 'success',
+        message: action.data.notification.message,
+      }
+
+    case 'REMOVE_NOTIFICATION':
+      return { ...state, type: null, message: null }
 
     default:
       console.log('type did not match', action.type)
@@ -19,4 +25,15 @@ const notificationReducer = (state = initialState, action) => {
   }
 }
 
-export { notificationReducer }
+const addNotification = (notification) => {
+  return {
+    type: 'ADD_NOTIFICATION',
+    data: { notification },
+  }
+}
+
+const removeNotification = () => {
+  return { type: 'REMOVE_NOTIFICATION', data: {} }
+}
+
+export { notificationReducer, addNotification, removeNotification }

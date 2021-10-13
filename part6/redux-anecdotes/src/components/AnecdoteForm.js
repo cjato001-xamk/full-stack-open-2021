@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { addAnecdote } from '../reducers/anecdoteReducer'
+import { addNotification } from '../reducers/notificationReducer'
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch()
@@ -12,6 +13,9 @@ const AnecdoteForm = () => {
     event.preventDefault()
 
     dispatch(addAnecdote(anecdote))
+    dispatch(
+      addNotification({ type: 'success', message: 'New anecdote added!' })
+    )
 
     setAnecdote('')
   }
