@@ -14,7 +14,11 @@ const AnecdoteForm = () => {
 
     dispatch(addAnecdote(anecdote))
     dispatch(
-      addNotification({ type: 'success', message: 'New anecdote added!' })
+      addNotification({
+        type: 'success',
+        message: `New anecdote "${anecdote}" added!`,
+        timeout: 3,
+      })
     )
 
     setAnecdote('')

@@ -15,7 +15,13 @@ const AnecdoteList = () => {
 
   const voteHandler = (anecdote) => {
     dispatch(vote(anecdote.id))
-    dispatch(addNotification({ type: 'success', message: 'Vote registered!' }))
+    dispatch(
+      addNotification({
+        type: 'success',
+        message: `Vote for "${anecdote.content}" registered!`,
+        timeout: 3,
+      })
+    )
   }
 
   return (

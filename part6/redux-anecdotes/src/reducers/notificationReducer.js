@@ -1,6 +1,5 @@
 const initialState = {
-  type: null,
-  message: null,
+  notifications: [],
 }
 
 const notificationReducer = (state = initialState, action) => {
@@ -10,14 +9,24 @@ const notificationReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case 'ADD_NOTIFICATION':
-      return {
-        ...state,
+      const notificationsAfterAdd = [...state.notifications]
+      notificationsAfterAdd.push({
         type: action.data.notification.type || 'success',
         message: action.data.notification.message,
+        timeout: action.data.notification.timeout,
+      })
+      console.log('after add', notificationsAfterAdd)
+      return {
+        ...state,
+        notifications: notificationsAfterAdd,
       }
 
     case 'REMOVE_NOTIFICATION':
-      return { ...state, type: null, message: null }
+      // Simply removes the oldest item from the notifications array
+      const notificationsAfterRemove = [...state.notifications]
+      notificationsAfterRemove.shift()
+      console.log('after remove', notificationsAfterRemove)
+      return { ...state, notifications: notificationsAfterRemove || [] }
 
     default:
       console.log('type did not match', action.type)

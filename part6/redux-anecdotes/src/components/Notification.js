@@ -5,13 +5,18 @@ import { removeNotification } from '../reducers/notificationReducer'
 
 const Notification = () => {
   const dispatch = useDispatch()
-  const notification = useSelector((state) => state.notification)
+
+  // Notifies each notification from the state in
+  // FIFO order
+  const notification = useSelector(
+    (state) => state.notification.notifications[0]
+  )
 
   useEffect(() => {
-    if (notification.message) {
+    if (notification) {
       setTimeout(() => {
         dispatch(removeNotification())
-      }, 5000)
+      }, notification.timeout * 1000 || 5000)
     }
   }, [dispatch, notification])
 
@@ -21,7 +26,7 @@ const Notification = () => {
     borderWidth: 1,
   }
 
-  return notification.message && <div style={style}>{notification.message}</div>
+  return notification ? <div style={style}>{notification.message}</div> : null
 }
 
 export { Notification }
