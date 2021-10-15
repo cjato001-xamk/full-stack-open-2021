@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Switch, Route, useRouteMatch } from 'react-router-dom'
+import { Switch, Route, useRouteMatch, useHistory } from 'react-router-dom'
 
 import { anecdotes as anecdoteData } from './data/anecdotes'
 import { IAnecdote } from './interfaces/IAnecdote'
@@ -12,6 +12,8 @@ import { CreateNew } from './components/CreateNew'
 import { E400 } from './components/E400'
 
 const App = () => {
+  const history = useHistory()
+
   const [anecdotes, setAnecdotes] = useState<IAnecdote[]>(anecdoteData)
 
   const match: any = useRouteMatch('/anecdotes/:id')
@@ -24,6 +26,9 @@ const App = () => {
   const addNew = (anecdote: IAnecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+
+    history.push('/')
+    setNotification(`a new anecdote ${anecdote.content} created!`)
   }
 
   const anecdoteById = (id: string) => anecdotes.find((a) => a.id === id)
@@ -43,7 +48,7 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
 
-      <Layout>
+      <Layout notification={notification}>
         <Switch>
           <Route path='/anecdotes/:id'>
             {anecdote && <Anecdote anecdote={anecdote} />}
