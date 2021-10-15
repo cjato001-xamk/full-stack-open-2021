@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Switch, Route } from 'react-router-dom'
 
 import { anecdotes as anecdoteData } from './data/anecdotes'
 import { IAnecdote } from './interfaces/IAnecdote'
@@ -36,9 +37,17 @@ const App = () => {
       <h1>Software anecdotes</h1>
 
       <Layout>
-        <AnecdoteList anecdotes={anecdotes} />
-        <About />
-        <CreateNew addNew={addNew} />
+        <Switch>
+          <Route path='/create'>
+            <CreateNew addNew={addNew} />
+          </Route>
+          <Route path='/about'>
+            <About />
+          </Route>
+          <Route path='/'>
+            <AnecdoteList anecdotes={anecdotes} />
+          </Route>
+        </Switch>
       </Layout>
     </div>
   )
