@@ -1,0 +1,10 @@
+{
+  "clearMocks": true,
+  "moduleFileExtensions": ["js", "jsx", "ts", "tsx"],
+  "roots": ["<rootDir>/src"],
+  "testEnvironment": "node",
+  "setupFiles": ["<rootDir>/.env.js"],
+  "transform": {
+    "^.+\\.tsx?$": "ts-jest"
+  }
+}
