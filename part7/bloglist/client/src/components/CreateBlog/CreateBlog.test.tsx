@@ -4,8 +4,8 @@ import { blogService } from '../../services/blogs'
 
 import { CreateBlog } from './CreateBlog'
 
-jest.mock('../services/blogs', () => {
-  const original = jest.requireActual('../services/blogs')
+jest.mock('../../services/blogs', () => {
+  const original = jest.requireActual('../../services/blogs')
   return {
     ...original,
     blogService: {
