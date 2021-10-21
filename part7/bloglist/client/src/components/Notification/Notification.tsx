@@ -1,35 +1,33 @@
 import { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
+import { RootState } from '../../store'
+import { removeNotification } from '../../reducers/notificationReducer'
 import { INotification } from '../../interfaces/INotification'
 
-type NotificationProps = {
-  notification: INotification
-  setNotification: React.Dispatch<React.SetStateAction<INotification>>
-}
+const Notification = (): JSX.Element | null => {
+  const dispatch = useDispatch()
 
-const Notification = ({
-  notification,
-  setNotification,
-}: NotificationProps): JSX.Element => {
-  useEffect(() => {
-    let timer: NodeJS.Timeout
-
-    if (notification.message) {
-      timer = setTimeout(() => {
-        setNotification({ message: '', type: '' })
-      }, 5000)
-    }
-
-    return (): void => {
-      clearTimeout(timer)
-    }
-  }, [notification, setNotification])
-
-  return (
-    <>
-      <p className={notification.type}>{notification.message}</p>
-    </>
+  // Notifies each notification from the state in
+  // FIFO order
+  const notification: INotification = useSelector(
+    (state: RootState) => state.notification.notifications[0]
   )
+
+  useEffect(() => {
+    if (notification) {
+      setTimeout(
+        () => {
+          dispatch(removeNotification())
+        },
+        notification.timeout ? notification.timeout : 3000
+      )
+    }
+  }, [dispatch, notification])
+
+  return notification ? (
+    <p className={notification.type}>{notification.message}</p>
+  ) : null
 }
 
 export { Notification }

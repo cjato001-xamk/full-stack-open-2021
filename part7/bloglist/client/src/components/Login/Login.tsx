@@ -1,15 +1,17 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { IUser } from '../../interfaces/IUser'
-import { INotification } from '../../interfaces/INotification'
 import { authService } from '../../services/auth'
+import { addNotification } from '../../reducers/notificationReducer'
 
 type LoginProps = {
   setUser: React.Dispatch<React.SetStateAction<IUser | null>>
-  setNotification: React.Dispatch<React.SetStateAction<INotification>>
 }
 
-const Login = ({ setUser, setNotification }: LoginProps): JSX.Element => {
+const Login = ({ setUser }: LoginProps): JSX.Element => {
+  const dispatch = useDispatch()
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false)
@@ -39,10 +41,13 @@ const Login = ({ setUser, setNotification }: LoginProps): JSX.Element => {
         }
       })
       .catch((error) => {
-        setNotification({
-          message: error?.response?.data?.error?.message || 'Failed to login.',
-          type: 'error',
-        })
+        dispatch(
+          addNotification({
+            message:
+              error?.response?.data?.error?.message || 'Failed to login.',
+            type: 'error',
+          })
+        )
 
         setIsLoggingIn(false)
       })

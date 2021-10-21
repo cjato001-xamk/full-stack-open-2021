@@ -3,7 +3,6 @@ import './App.css'
 import { useState, useEffect } from 'react'
 
 import { IUser } from './interfaces/IUser'
-import { INotification } from './interfaces/INotification'
 import { authService } from './services/auth'
 
 import { Blogs } from './components/Blogs'
@@ -13,10 +12,6 @@ import { Notification } from './components/Notification'
 
 const App = (): JSX.Element => {
   const [user, setUser] = useState<IUser | null>(null)
-  const [notification, setNotification] = useState<INotification>({
-    message: '',
-    type: '',
-  })
 
   useEffect(() => {
     if (!user && authService.getUser() !== undefined) {
@@ -26,20 +21,17 @@ const App = (): JSX.Element => {
 
   return (
     <div>
-      <Notification
-        notification={notification}
-        setNotification={setNotification}
-      />
+      <Notification />
 
       {!user ? (
-        <Login setUser={setUser} setNotification={setNotification} />
+        <Login setUser={setUser} />
       ) : (
         <>
           <p>
             You are logged in as {user.name}. <LogoutButton setUser={setUser} />
           </p>
 
-          <Blogs setNotification={setNotification} />
+          <Blogs />
         </>
       )}
     </div>

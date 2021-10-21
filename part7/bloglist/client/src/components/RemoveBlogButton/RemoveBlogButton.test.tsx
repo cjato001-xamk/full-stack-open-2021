@@ -1,8 +1,20 @@
 import { render, screen } from '@testing-library/react'
+import * as redux from 'react-redux'
 
 import { RemoveBlogButton } from './RemoveBlogButton'
 
 describe('RemoveBlogButton component', () => {
+  let spyOnUseDispatch
+
+  beforeEach(() => {
+    spyOnUseDispatch = jest.spyOn(redux, 'useDispatch')
+    spyOnUseDispatch.mockReturnValue(jest.fn())
+  })
+
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
+
   it('should render', () => {
     const mockBlog = {
       id: 'test-id',
@@ -17,13 +29,7 @@ describe('RemoveBlogButton component', () => {
       },
     }
 
-    render(
-      <RemoveBlogButton
-        blog={mockBlog}
-        setNotification={jest.fn()}
-        refreshBlogs={jest.fn()}
-      />
-    )
+    render(<RemoveBlogButton blog={mockBlog} refreshBlogs={jest.fn()} />)
 
     expect(screen.getByText('Remove')).toBeInTheDocument()
   })

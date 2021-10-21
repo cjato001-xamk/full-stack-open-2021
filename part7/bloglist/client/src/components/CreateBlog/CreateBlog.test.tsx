@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import * as redux from 'react-redux'
 
 import { blogService } from '../../services/blogs'
 
@@ -15,14 +16,21 @@ jest.mock('../../services/blogs', () => {
   }
 })
 
-describe('Loading component', () => {
+describe('CreateBlog component', () => {
+  let spyOnUseDispatch
+
+  beforeEach(() => {
+    spyOnUseDispatch = jest.spyOn(redux, 'useDispatch')
+    spyOnUseDispatch.mockReturnValue(jest.fn())
+  })
+
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
+
   it('should render', () => {
     render(
-      <CreateBlog
-        refreshBlogs={jest.fn()}
-        setNotification={jest.fn()}
-        setShowCreateBlog={jest.fn()}
-      />
+      <CreateBlog refreshBlogs={jest.fn()} setShowCreateBlog={jest.fn()} />
     )
 
     expect(screen.getByText('Create new blog')).toBeInTheDocument()
@@ -32,11 +40,7 @@ describe('Loading component', () => {
     const spy = jest.spyOn(blogService, 'create')
 
     const { container } = render(
-      <CreateBlog
-        refreshBlogs={jest.fn()}
-        setNotification={jest.fn()}
-        setShowCreateBlog={jest.fn()}
-      />
+      <CreateBlog refreshBlogs={jest.fn()} setShowCreateBlog={jest.fn()} />
     )
 
     fireEvent.change(

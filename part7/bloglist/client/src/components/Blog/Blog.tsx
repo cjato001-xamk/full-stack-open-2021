@@ -1,24 +1,22 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { IBlog } from '../../interfaces/IBlog'
-import { INotification } from '../../interfaces/INotification'
 import { authService } from '../../services/auth'
 import { blogService } from '../../services/blogs'
+import { addNotification } from '../../reducers/notificationReducer'
 
 import { LikeButton } from '../LikeButton'
 import { RemoveBlogButton } from '../RemoveBlogButton'
 
 type BlogProps = {
   blog: IBlog
-  setNotification: React.Dispatch<React.SetStateAction<INotification>>
   refreshBlogs: () => void
 }
 
-const Blog = ({
-  blog,
-  setNotification,
-  refreshBlogs,
-}: BlogProps): JSX.Element => {
+const Blog = ({ blog, refreshBlogs }: BlogProps): JSX.Element => {
+  const dispatch = useDispatch()
+
   const [showBlogDetails, setShowBlogDetails] = useState<boolean>(false)
   const [isLiking, setIsLiking] = useState<boolean>(false)
 
@@ -35,11 +33,14 @@ const Blog = ({
         setIsLiking(false)
       })
       .catch((error) => {
-        setNotification({
-          message:
-            error?.response?.data?.error?.message || 'Failed to update likes.',
-          type: 'error',
-        })
+        dispatch(
+          addNotification({
+            message:
+              error?.response?.data?.error?.message ||
+              'Failed to update likes.',
+            type: 'error',
+          })
+        )
 
         setIsLiking(false)
       })
@@ -70,11 +71,7 @@ const Blog = ({
           </ul>
 
           {user?.id && user.id === blog.user.id && (
-            <RemoveBlogButton
-              blog={blog}
-              setNotification={setNotification}
-              refreshBlogs={refreshBlogs}
-            />
+            <RemoveBlogButton blog={blog} refreshBlogs={refreshBlogs} />
           )}
         </>
       )}

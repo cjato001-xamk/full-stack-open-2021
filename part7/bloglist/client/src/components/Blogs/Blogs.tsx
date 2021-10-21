@@ -1,18 +1,17 @@
 import { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
-import { Blog } from '../Blog'
 import { blogService } from '../../services/blogs'
 import { IBlog } from '../../interfaces/IBlog'
-import { INotification } from '../../interfaces/INotification'
+import { addNotification } from '../../reducers/notificationReducer'
 
+import { Blog } from '../Blog'
 import { CreateBlog } from '../CreateBlog'
 import { Loading } from '../Loading'
 
-type BlogsProps = {
-  setNotification: React.Dispatch<React.SetStateAction<INotification>>
-}
+const Blogs = (): JSX.Element => {
+  const dispatch = useDispatch()
 
-const Blogs = ({ setNotification }: BlogsProps): JSX.Element => {
   const [blogs, setBlogs] = useState<IBlog[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [showCreateBlog, setShowCreateBlog] = useState<boolean>(false)
@@ -33,11 +32,13 @@ const Blogs = ({ setNotification }: BlogsProps): JSX.Element => {
         setIsLoading(false)
       })
       .catch((error) => {
-        setNotification({
-          message:
-            error?.response?.data?.error?.message || 'Failed to fetch blogs.',
-          type: 'error',
-        })
+        dispatch(
+          addNotification({
+            message:
+              error?.response?.data?.error?.message || 'Failed to fetch blogs.',
+            type: 'error',
+          })
+        )
 
         setIsLoading(false)
       })
@@ -57,7 +58,6 @@ const Blogs = ({ setNotification }: BlogsProps): JSX.Element => {
       {showCreateBlog && (
         <CreateBlog
           refreshBlogs={refreshBlogs}
-          setNotification={setNotification}
           setShowCreateBlog={setShowCreateBlog}
         />
       )}
@@ -68,12 +68,7 @@ const Blogs = ({ setNotification }: BlogsProps): JSX.Element => {
         <>
           <div id='blogs'>
             {blogs.map((blog) => (
-              <Blog
-                key={blog.id}
-                blog={blog}
-                setNotification={setNotification}
-                refreshBlogs={refreshBlogs}
-              />
+              <Blog key={blog.id} blog={blog} refreshBlogs={refreshBlogs} />
             ))}
           </div>
           {isLoading && <p>Updating bloglist...</p>}

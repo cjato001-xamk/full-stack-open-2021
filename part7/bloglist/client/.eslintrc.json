@@ -20,7 +20,7 @@
   },
   "plugins": ["react", "jest", "cypress"],
   "rules": {
-    "indent": ["error", 2],
+    "indent": "off",
     "linebreak-style": ["error", "unix"],
     "semi": ["error", "never"],
     "eqeqeq": "error",
@@ -29,7 +29,8 @@
     "arrow-spacing": ["error", { "before": true, "after": true }],
     "no-console": "warn",
     "no-warning-comments": "warn",
-    "no-unused-vars": "warn",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
     "quotes": ["error", "single"],
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/explicit-function-return-type": "warn",

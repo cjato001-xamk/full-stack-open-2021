@@ -1,5 +1,8 @@
 import { queryByText, render, screen, fireEvent } from '@testing-library/react'
+import * as redux from 'react-redux'
+
 import { IBlog } from '../../interfaces/IBlog'
+
 import { Blog } from './Blog'
 
 describe('Blog component', () => {
@@ -7,7 +10,12 @@ describe('Blog component', () => {
   let container: any
   let mockBlog: IBlog
 
+  let spyOnUseDispatch
+
   beforeEach(() => {
+    spyOnUseDispatch = jest.spyOn(redux, 'useDispatch')
+    spyOnUseDispatch.mockReturnValue(jest.fn())
+
     mockBlog = {
       id: 'test-id',
       title: 'test-title',
@@ -20,13 +28,11 @@ describe('Blog component', () => {
         name: '',
       },
     }
-    ;({ container } = render(
-      <Blog
-        blog={mockBlog}
-        setNotification={jest.fn()}
-        refreshBlogs={jest.fn()}
-      />
-    ))
+    ;({ container } = render(<Blog blog={mockBlog} refreshBlogs={jest.fn()} />))
+  })
+
+  afterEach(() => {
+    jest.restoreAllMocks()
   })
 
   it('renders a blog without details', () => {

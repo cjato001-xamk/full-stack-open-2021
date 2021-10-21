@@ -1,19 +1,20 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { blogService } from '../../services/blogs'
-import { INotification } from '../../interfaces/INotification'
+import { addNotification } from '../../reducers/notificationReducer'
 
 type CreateBlogProps = {
   refreshBlogs: () => void
-  setNotification: React.Dispatch<React.SetStateAction<INotification>>
   setShowCreateBlog: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const CreateBlog = ({
   refreshBlogs,
-  setNotification,
   setShowCreateBlog,
 }: CreateBlogProps): JSX.Element => {
+  const dispatch = useDispatch()
+
   const [title, setTitle] = useState<string>('')
   const [author, setAuthor] = useState<string>('')
   const [url, setUrl] = useState<string>('')
@@ -27,10 +28,12 @@ const CreateBlog = ({
     blogService
       .create({ title, author, url })
       .then(() => {
-        setNotification({
-          message: `A new blog "${title}" by "${author}" added.`,
-          type: 'success',
-        })
+        dispatch(
+          addNotification({
+            message: `A new blog "${title}" by "${author}" added.`,
+            type: 'success',
+          })
+        )
 
         setIsSubmitting(false)
 
@@ -43,11 +46,13 @@ const CreateBlog = ({
         setShowCreateBlog(false)
       })
       .catch((error) => {
-        setNotification({
-          message:
-            error?.response?.data?.error?.message || 'Failed to create blog.',
-          type: 'error',
-        })
+        dispatch(
+          addNotification({
+            message:
+              error?.response?.data?.error?.message || 'Failed to create blog.',
+            type: 'error',
+          })
+        )
 
         setIsSubmitting(false)
       })
