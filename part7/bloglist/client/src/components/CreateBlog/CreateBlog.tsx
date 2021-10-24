@@ -5,12 +5,12 @@ import { blogService } from '../../services/blogs'
 import { addNotification } from '../../reducers/notificationReducer'
 
 type CreateBlogProps = {
-  refreshBlogs: () => void
+  // refreshBlogs: () => void // FIXME
   setShowCreateBlog: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const CreateBlog = ({
-  refreshBlogs,
+  // refreshBlogs, // FIXME
   setShowCreateBlog,
 }: CreateBlogProps): JSX.Element => {
   const dispatch = useDispatch()
@@ -41,7 +41,7 @@ const CreateBlog = ({
         setAuthor('')
         setUrl('')
 
-        refreshBlogs()
+        //refreshBlogs() // FIXME
 
         setShowCreateBlog(false)
       })

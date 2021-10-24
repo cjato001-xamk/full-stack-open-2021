@@ -1,48 +1,19 @@
-import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
 
-import { blogService } from '../../services/blogs'
-import { IBlog } from '../../interfaces/IBlog'
-import { addNotification } from '../../reducers/notificationReducer'
+import { RootState } from '../../store'
 
 import { Blog } from '../Blog'
 import { CreateBlog } from '../CreateBlog'
 import { Loading } from '../Loading'
 
 const Blogs = (): JSX.Element => {
-  const dispatch = useDispatch()
+  const blogs = useSelector((state: RootState) =>
+    state.blogs.blogs.sort((a, b) => b.likes - a.likes)
+  )
+  const isLoading = useSelector((state: RootState) => state.blogs.loading)
 
-  const [blogs, setBlogs] = useState<IBlog[]>([])
-  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [showCreateBlog, setShowCreateBlog] = useState<boolean>(false)
-
-  useEffect(() => {
-    refreshBlogs()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const refreshBlogs = (): void => {
-    setIsLoading(true)
-
-    blogService
-      .getAll()
-      .then((response) => {
-        setBlogs(response.data.data?.sort((a, b) => b.likes - a.likes) || [])
-
-        setIsLoading(false)
-      })
-      .catch((error) => {
-        dispatch(
-          addNotification({
-            message:
-              error?.response?.data?.error?.message || 'Failed to fetch blogs.',
-            type: 'error',
-          })
-        )
-
-        setIsLoading(false)
-      })
-  }
 
   return (
     <div>
@@ -55,12 +26,7 @@ const Blogs = (): JSX.Element => {
         )}
       </h2>
 
-      {showCreateBlog && (
-        <CreateBlog
-          refreshBlogs={refreshBlogs}
-          setShowCreateBlog={setShowCreateBlog}
-        />
-      )}
+      {showCreateBlog && <CreateBlog setShowCreateBlog={setShowCreateBlog} />}
 
       {isLoading && blogs.length === 0 ? (
         <Loading />
@@ -68,7 +34,7 @@ const Blogs = (): JSX.Element => {
         <>
           <div id='blogs'>
             {blogs.map((blog) => (
-              <Blog key={blog.id} blog={blog} refreshBlogs={refreshBlogs} />
+              <Blog key={blog.id} blog={blog} />
             ))}
           </div>
           {isLoading && <p>Updating bloglist...</p>}

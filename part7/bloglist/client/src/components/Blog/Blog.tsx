@@ -11,10 +11,10 @@ import { RemoveBlogButton } from '../RemoveBlogButton'
 
 type BlogProps = {
   blog: IBlog
-  refreshBlogs: () => void
+  //refreshBlogs: () => void // FIXME
 }
 
-const Blog = ({ blog, refreshBlogs }: BlogProps): JSX.Element => {
+const Blog = ({ blog }: BlogProps): JSX.Element => {
   const dispatch = useDispatch()
 
   const [showBlogDetails, setShowBlogDetails] = useState<boolean>(false)
@@ -28,7 +28,7 @@ const Blog = ({ blog, refreshBlogs }: BlogProps): JSX.Element => {
     blogService
       .like({ id: blog.id, likes: blog.likes + 1 })
       .then(() => {
-        refreshBlogs()
+        //refreshBlogs() // FIXME
 
         setIsLiking(false)
       })
@@ -71,7 +71,7 @@ const Blog = ({ blog, refreshBlogs }: BlogProps): JSX.Element => {
           </ul>
 
           {user?.id && user.id === blog.user.id && (
-            <RemoveBlogButton blog={blog} refreshBlogs={refreshBlogs} />
+            <RemoveBlogButton blog={blog} />
           )}
         </>
       )}

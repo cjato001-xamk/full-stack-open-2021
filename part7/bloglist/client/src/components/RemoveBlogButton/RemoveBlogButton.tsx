@@ -7,13 +7,10 @@ import { addNotification } from '../../reducers/notificationReducer'
 
 type RemoveBlogButtonProps = {
   blog: IBlog
-  refreshBlogs: () => void
+  // refreshBlogs: () => void // FIXME
 }
 
-const RemoveBlogButton = ({
-  blog,
-  refreshBlogs,
-}: RemoveBlogButtonProps): JSX.Element => {
+const RemoveBlogButton = ({ blog }: RemoveBlogButtonProps): JSX.Element => {
   const dispatch = useDispatch()
 
   const [areYouSure, setAreYouSure] = useState<boolean>(false)
@@ -32,7 +29,7 @@ const RemoveBlogButton = ({
           })
         )
 
-        refreshBlogs()
+        //refreshBlogs() // FIXME
 
         setIsRemoving(false)
       })
