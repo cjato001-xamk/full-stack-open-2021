@@ -9,7 +9,7 @@ interface NotificationState {
   notifications: INotification[]
 }
 
-interface IAddNotification {
+export interface IAddNotification {
   type: NotificationActionType.ADD_NOTIFICATION
   data: { notification: INotification }
 }

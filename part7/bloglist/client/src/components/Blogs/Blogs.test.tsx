@@ -4,9 +4,13 @@ import * as redux from 'react-redux'
 import { Blogs } from './Blogs'
 
 describe('Blogs component', () => {
+  let spyOnUseSelector
   let spyOnUseDispatch
 
   beforeEach(() => {
+    spyOnUseSelector = jest.spyOn(redux, 'useSelector')
+    spyOnUseSelector.mockReturnValue([])
+
     spyOnUseDispatch = jest.spyOn(redux, 'useDispatch')
     spyOnUseDispatch.mockReturnValue(jest.fn())
   })

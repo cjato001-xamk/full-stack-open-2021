@@ -10,9 +10,13 @@ describe('Blog component', () => {
   let container: any
   let mockBlog: IBlog
 
+  let spyOnUseSelector
   let spyOnUseDispatch
 
   beforeEach(() => {
+    spyOnUseSelector = jest.spyOn(redux, 'useSelector')
+    spyOnUseSelector.mockReturnValue([])
+
     spyOnUseDispatch = jest.spyOn(redux, 'useDispatch')
     spyOnUseDispatch.mockReturnValue(jest.fn())
 
@@ -28,7 +32,7 @@ describe('Blog component', () => {
         name: '',
       },
     }
-    ;({ container } = render(<Blog blog={mockBlog} refreshBlogs={jest.fn()} />))
+    ;({ container } = render(<Blog blog={mockBlog} />))
   })
 
   afterEach(() => {

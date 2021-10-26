@@ -1,49 +1,25 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
+import { RootState } from '../../store'
 import { IBlog } from '../../interfaces/IBlog'
-import { blogService } from '../../services/blogs'
-import { addNotification } from '../../reducers/notificationReducer'
+import { removeBlog } from '../../reducers/blogReducer'
 
 type RemoveBlogButtonProps = {
   blog: IBlog
-  // refreshBlogs: () => void // FIXME
 }
 
 const RemoveBlogButton = ({ blog }: RemoveBlogButtonProps): JSX.Element => {
   const dispatch = useDispatch()
 
+  const isRemoving = useSelector((state: RootState) =>
+    state.blogs.removing.some((blogId) => blogId === blog.id)
+  )
+
   const [areYouSure, setAreYouSure] = useState<boolean>(false)
-  const [isRemoving, setIsRemoving] = useState<boolean>(false)
 
   const removeHandler = (): void => {
-    setIsRemoving(true)
-
-    blogService
-      .remove(blog.id)
-      .then(() => {
-        dispatch(
-          addNotification({
-            message: `Blog "${blog.title}" removed.`,
-            type: 'success',
-          })
-        )
-
-        //refreshBlogs() // FIXME
-
-        setIsRemoving(false)
-      })
-      .catch((error) => {
-        dispatch(
-          addNotification({
-            message:
-              error?.response?.data?.error?.message || 'Failed to remove blog.',
-            type: 'error',
-          })
-        )
-
-        setIsRemoving(false)
-      })
+    dispatch(removeBlog(blog))
   }
 
   return (

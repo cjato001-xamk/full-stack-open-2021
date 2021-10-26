@@ -1,49 +1,31 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
+import { RootState } from '../../store'
 import { IBlog } from '../../interfaces/IBlog'
 import { authService } from '../../services/auth'
-import { blogService } from '../../services/blogs'
-import { addNotification } from '../../reducers/notificationReducer'
+import { likeBlog } from '../../reducers/blogReducer'
 
 import { LikeButton } from '../LikeButton'
 import { RemoveBlogButton } from '../RemoveBlogButton'
 
 type BlogProps = {
   blog: IBlog
-  //refreshBlogs: () => void // FIXME
 }
 
 const Blog = ({ blog }: BlogProps): JSX.Element => {
   const dispatch = useDispatch()
 
+  const isLiking = useSelector((state: RootState) =>
+    state.blogs.liking.some((blogId) => blogId === blog.id)
+  )
+
   const [showBlogDetails, setShowBlogDetails] = useState<boolean>(false)
-  const [isLiking, setIsLiking] = useState<boolean>(false)
 
   const user = authService.getUser()
 
   const like = (): void => {
-    setIsLiking(true)
-
-    blogService
-      .like({ id: blog.id, likes: blog.likes + 1 })
-      .then(() => {
-        //refreshBlogs() // FIXME
-
-        setIsLiking(false)
-      })
-      .catch((error) => {
-        dispatch(
-          addNotification({
-            message:
-              error?.response?.data?.error?.message ||
-              'Failed to update likes.',
-            type: 'error',
-          })
-        )
-
-        setIsLiking(false)
-      })
+    dispatch(likeBlog(blog))
   }
 
   return (

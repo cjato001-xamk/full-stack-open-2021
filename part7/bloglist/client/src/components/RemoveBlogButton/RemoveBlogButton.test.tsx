@@ -4,9 +4,13 @@ import * as redux from 'react-redux'
 import { RemoveBlogButton } from './RemoveBlogButton'
 
 describe('RemoveBlogButton component', () => {
+  let spyOnUseSelector
   let spyOnUseDispatch
 
   beforeEach(() => {
+    spyOnUseSelector = jest.spyOn(redux, 'useSelector')
+    spyOnUseSelector.mockReturnValue([])
+
     spyOnUseDispatch = jest.spyOn(redux, 'useDispatch')
     spyOnUseDispatch.mockReturnValue(jest.fn())
   })
@@ -29,7 +33,7 @@ describe('RemoveBlogButton component', () => {
       },
     }
 
-    render(<RemoveBlogButton blog={mockBlog} refreshBlogs={jest.fn()} />)
+    render(<RemoveBlogButton blog={mockBlog} />)
 
     expect(screen.getByText('Remove')).toBeInTheDocument()
   })
