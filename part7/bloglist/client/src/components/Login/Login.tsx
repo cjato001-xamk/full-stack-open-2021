@@ -1,56 +1,22 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { IUser } from '../../interfaces/IUser'
-import { authService } from '../../services/auth'
-import { addNotification } from '../../reducers/notificationReducer'
+import { RootState } from '../../store'
+import { login } from '../../reducers/userReducer'
 
-type LoginProps = {
-  setUser: React.Dispatch<React.SetStateAction<IUser | null>>
-}
-
-const Login = ({ setUser }: LoginProps): JSX.Element => {
+const Login = (): JSX.Element => {
   const dispatch = useDispatch()
+  const authInProgress = useSelector(
+    (state: RootState) => state.users.authInProgress
+  )
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false)
 
   const handleLogin = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault()
 
-    setIsLoggingIn(true)
-
-    authService
-      .login({
-        username,
-        password,
-      })
-      .then((response) => {
-        if (response.data.data) {
-          setUsername('')
-          setPassword('')
-
-          authService.setUser(response.data.data)
-
-          setIsLoggingIn(false)
-
-          setUser(response.data.data)
-        } else {
-          setIsLoggingIn(false)
-        }
-      })
-      .catch((error) => {
-        dispatch(
-          addNotification({
-            message:
-              error?.response?.data?.error?.message || 'Failed to login.',
-            type: 'error',
-          })
-        )
-
-        setIsLoggingIn(false)
-      })
+    dispatch(login({ username, password }))
   }
 
   return (
@@ -76,8 +42,8 @@ const Login = ({ setUser }: LoginProps): JSX.Element => {
             onChange={({ target }): void => setPassword(target.value)}
           />
         </div>
-        <button type='submit' disabled={isLoggingIn}>
-          {!isLoggingIn ? 'Login' : 'Logging in...'}
+        <button type='submit' disabled={authInProgress}>
+          {!authInProgress ? 'Login' : 'Logging in...'}
         </button>
       </form>
     </>

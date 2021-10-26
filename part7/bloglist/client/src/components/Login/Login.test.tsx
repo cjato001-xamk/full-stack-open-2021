@@ -4,9 +4,13 @@ import * as redux from 'react-redux'
 import { Login } from './Login'
 
 describe('Login', () => {
+  let spyOnUseSelector
   let spyOnUseDispatch
 
   beforeEach(() => {
+    spyOnUseSelector = jest.spyOn(redux, 'useSelector')
+    spyOnUseSelector.mockReturnValue(false)
+
     spyOnUseDispatch = jest.spyOn(redux, 'useDispatch')
     spyOnUseDispatch.mockReturnValue(jest.fn())
   })
@@ -16,7 +20,7 @@ describe('Login', () => {
   })
 
   it('should have login form', () => {
-    render(<Login setUser={jest.fn()} />)
+    render(<Login />)
 
     expect(screen.getByRole('heading')).toHaveTextContent('Login')
     expect(screen.getByRole('button')).toHaveTextContent('Login')

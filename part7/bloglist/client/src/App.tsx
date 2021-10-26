@@ -1,11 +1,12 @@
 import './App.css'
 
-import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { IUser } from './interfaces/IUser'
 import { authService } from './services/auth'
 import { initializeBlogs } from './reducers/blogReducer'
+import { login, logout } from './reducers/userReducer'
+import { RootState } from './store'
 
 import { Blogs } from './components/Blogs'
 import { Login } from './components/Login'
@@ -15,28 +16,34 @@ import { Notification } from './components/Notification'
 const App = (): JSX.Element => {
   const dispatch = useDispatch()
 
-  const [user, setUser] = useState<IUser | null>(null)
+  const user = useSelector((state: RootState) => state.users.loggedInUser)
 
   useEffect(() => {
     dispatch(initializeBlogs())
   }, [dispatch])
 
   useEffect(() => {
+    // Check if local storage has user
     if (!user && authService.getUser() !== undefined) {
-      setUser(authService.getUser())
+      dispatch(login({ user: authService.getUser() }))
     }
-  }, [user])
+  }, [dispatch, user])
+
+  const logoutHandler = (): void => {
+    dispatch(logout())
+  }
 
   return (
     <div>
       <Notification />
 
       {!user ? (
-        <Login setUser={setUser} />
+        <Login />
       ) : (
         <>
           <p>
-            You are logged in as {user.name}. <LogoutButton setUser={setUser} />
+            You are logged in as {user.name}.{' '}
+            <LogoutButton logout={logoutHandler} />
           </p>
 
           <Blogs />

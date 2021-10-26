@@ -9,7 +9,7 @@ describe('App', () => {
 
   beforeEach(() => {
     spyOnUseSelector = jest.spyOn(redux, 'useSelector')
-    spyOnUseSelector.mockReturnValue([])
+    spyOnUseSelector.mockReturnValue(null)
 
     spyOnUseDispatch = jest.spyOn(redux, 'useDispatch')
     spyOnUseDispatch.mockReturnValue(jest.fn())
