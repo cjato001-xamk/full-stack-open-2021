@@ -84,6 +84,8 @@ const login = ({
           data: user,
         })
 
+        authService.setUser(user)
+
         return
       }
 
@@ -93,12 +95,16 @@ const login = ({
           password,
         })
 
-        dispatch({
-          type: UsersActionType.LOGIN,
-          data: userFromServer.data.data || null,
-        })
+        if (userFromServer.data.data) {
+          user = userFromServer.data.data
 
-        return
+          dispatch({
+            type: UsersActionType.LOGIN,
+            data: userFromServer.data.data,
+          })
+
+          authService.setUser(user)
+        }
       }
     } catch (error: any) {
       dispatch(
