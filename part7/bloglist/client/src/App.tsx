@@ -2,9 +2,11 @@ import './App.css'
 
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Switch, Route } from 'react-router-dom'
 
 import { authService } from './services/auth'
 import { initializeBlogs } from './reducers/blogReducer'
+import { initializeUsers } from './reducers/userReducer'
 import { login, logout } from './reducers/userReducer'
 import { RootState } from './store'
 
@@ -12,6 +14,7 @@ import { Blogs } from './components/Blogs'
 import { Login } from './components/Login'
 import { LogoutButton } from './components/LogoutButton'
 import { Notification } from './components/Notification'
+import { Users } from './components/Users'
 
 const App = (): JSX.Element => {
   const dispatch = useDispatch()
@@ -20,6 +23,7 @@ const App = (): JSX.Element => {
 
   useEffect(() => {
     dispatch(initializeBlogs())
+    dispatch(initializeUsers())
   }, [dispatch])
 
   useEffect(() => {
@@ -46,7 +50,14 @@ const App = (): JSX.Element => {
             <LogoutButton logout={logoutHandler} />
           </p>
 
-          <Blogs />
+          <Switch>
+            <Route path='/users'>
+              <Users />
+            </Route>
+            <Route path='/'>
+              <Blogs />
+            </Route>
+          </Switch>
         </>
       )}
     </div>

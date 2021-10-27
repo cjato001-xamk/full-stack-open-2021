@@ -2,6 +2,7 @@ import { ThunkDispatch } from 'redux-thunk'
 
 import { IUser } from '../interfaces/IUser'
 import { authService } from '../services/auth'
+import { userService } from '../services/users'
 import { RootState } from '../store'
 import { addNotification, IAddNotification } from './notificationReducer'
 
@@ -9,10 +10,13 @@ enum UsersActionType {
   LOGIN = 'LOGIN',
   AUTH_IN_PROGRESS = 'AUTH_IN_PROGRESS',
   LOGOUT = 'LOGOUT',
+  INIT_USERS = 'INIT_USERS',
+  LOADING_USERS = 'LOADING_USERS',
 }
 
 interface UsersState {
   users: IUser[]
+  loading: boolean
   loggedInUser: IUser | null
   authInProgress: boolean
 }
@@ -32,10 +36,26 @@ interface IAuthInProgress {
   data: { authInProgress: boolean }
 }
 
-type UsersActionInterfaces = ILogin | ILogout | IAuthInProgress
+interface ILoadingUsers {
+  type: UsersActionType.LOADING_USERS
+  data: boolean
+}
+
+interface IInitializeUsers {
+  type: UsersActionType.INIT_USERS
+  data: IUser[]
+}
+
+type UsersActionInterfaces =
+  | ILogin
+  | ILogout
+  | IAuthInProgress
+  | ILoadingUsers
+  | IInitializeUsers
 
 const initialState: UsersState = {
   users: [],
+  loading: false,
   loggedInUser: null,
   authInProgress: false,
 }
@@ -57,6 +77,18 @@ const usersReducer = (
 
     case UsersActionType.AUTH_IN_PROGRESS:
       return { ...state, authInProgress: action.data.authInProgress }
+
+    case UsersActionType.LOADING_USERS:
+      return {
+        ...state,
+        loading: action.data,
+      }
+
+    case UsersActionType.INIT_USERS:
+      return {
+        ...state,
+        users: action.data,
+      }
 
     default:
       return state
@@ -140,4 +172,43 @@ const setAuthInProgress = (authInProgress: boolean) => {
   }
 }
 
-export { usersReducer, login, logout }
+const setLoadingUsers = (loading: boolean) => {
+  return (dispatch: ThunkDispatch<RootState, void, ILoadingUsers>): void => {
+    dispatch({
+      type: UsersActionType.LOADING_USERS,
+      data: loading,
+    })
+  }
+}
+
+const initializeUsers = () => {
+  return async (
+    dispatch: ThunkDispatch<
+      RootState,
+      void,
+      IInitializeUsers | IAddNotification
+    >
+  ): Promise<void> => {
+    dispatch(setLoadingUsers(true))
+
+    try {
+      const users = await userService.getAll()
+      dispatch({
+        type: UsersActionType.INIT_USERS,
+        data: users.data?.data || [],
+      })
+    } catch (error: any) {
+      dispatch(
+        addNotification({
+          message:
+            error?.response?.data?.error?.message || 'Failed to fetch users.',
+          type: 'error',
+        })
+      )
+    }
+
+    dispatch(setLoadingUsers(false))
+  }
+}
+
+export { usersReducer, login, logout, initializeUsers }
