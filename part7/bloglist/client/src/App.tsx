@@ -15,6 +15,7 @@ import { Login } from './components/Login'
 import { LogoutButton } from './components/LogoutButton'
 import { Notification } from './components/Notification'
 import { Users } from './components/Users'
+import { User } from './components/User'
 
 const App = (): JSX.Element => {
   const dispatch = useDispatch()
@@ -51,6 +52,9 @@ const App = (): JSX.Element => {
           </p>
 
           <Switch>
+            <Route path='/users/:id'>
+              <User />
+            </Route>
             <Route path='/users'>
               <Users />
             </Route>

@@ -18,7 +18,7 @@ users.get(
     })
 
     return res.json({
-      data: users.map((user) => user.toJSON()),
+      data: users.map((user) => user.toJSON()) as unknown as IUserClient[],
     })
   }
 )
@@ -28,11 +28,16 @@ users.get(
   async (req: Request, res: Response<IApiResponse<IUserClient>>) => {
     const { id } = req.params
 
-    const user = await User.findOne({ _id: id })
+    const user = await User.findOne({ _id: id }).populate('blogs', {
+      url: 1,
+      title: 1,
+      author: 1,
+      id: 1,
+    })
 
     if (user) {
       return res.json({
-        data: user.toJSON(),
+        data: user.toJSON() as unknown as IUserClient,
       })
     } else {
       return res.status(404).json({
@@ -94,7 +99,7 @@ users.post(
     const savedUser = await user.save()
 
     return res.json({
-      data: savedUser.toJSON(),
+      data: savedUser.toJSON() as unknown as IUserClient,
     })
   }
 )

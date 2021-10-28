@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 import { RootState } from '../../store'
 
@@ -26,7 +27,9 @@ const Users = (): JSX.Element => {
             <tbody>
               {users.map((user) => (
                 <tr key={user.id}>
-                  <td>{user.name}</td>
+                  <td>
+                    <Link to={`users/${user.id}`}>{user.name}</Link>
+                  </td>
                   <td>{user.blogs?.length || 0}</td>
                 </tr>
               ))}

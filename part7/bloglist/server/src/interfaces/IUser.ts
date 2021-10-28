@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
 
+import { IBlogClient } from './IBlog'
+
 export interface IUser {
   username: string
   name: string
@@ -15,5 +17,5 @@ export interface IUserClient {
   token?: string
   username: string
   name: string
-  blogs?: string[]
+  blogs?: Omit<IBlogClient, 'id' | 'likes'>[]
 }
