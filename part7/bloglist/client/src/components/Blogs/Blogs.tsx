@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 import { RootState } from '../../store'
 
-import { Blog } from '../Blog'
 import { CreateBlog } from '../CreateBlog'
 import { Loading } from '../Loading'
 
@@ -32,11 +32,13 @@ const Blogs = (): JSX.Element => {
         <Loading />
       ) : (
         <>
-          <div id='blogs'>
+          <ul id='blogs'>
             {blogs.map((blog) => (
-              <Blog key={blog.id} blog={blog} />
+              <li key={blog.id}>
+                <Link to={`blogs/${blog.id}`}>{blog.title}</Link>
+              </li>
             ))}
-          </div>
+          </ul>
           {isLoading && <p>Updating bloglist...</p>}
         </>
       )}

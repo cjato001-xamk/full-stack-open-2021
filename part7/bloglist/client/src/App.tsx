@@ -11,6 +11,7 @@ import { login, logout } from './reducers/userReducer'
 import { RootState } from './store'
 
 import { Blogs } from './components/Blogs'
+import { Blog } from './components/Blog'
 import { Login } from './components/Login'
 import { LogoutButton } from './components/LogoutButton'
 import { Notification } from './components/Notification'
@@ -57,6 +58,9 @@ const App = (): JSX.Element => {
             </Route>
             <Route path='/users'>
               <Users />
+            </Route>
+            <Route path='/blogs/:id'>
+              <Blog />
             </Route>
             <Route path='/'>
               <Blogs />

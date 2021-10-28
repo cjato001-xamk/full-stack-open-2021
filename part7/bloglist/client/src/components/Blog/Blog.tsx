@@ -1,62 +1,53 @@
-import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
 import { RootState } from '../../store'
-import { IBlog } from '../../interfaces/IBlog'
-import { authService } from '../../services/auth'
 import { likeBlog } from '../../reducers/blogReducer'
 
 import { LikeButton } from '../LikeButton'
 import { RemoveBlogButton } from '../RemoveBlogButton'
 
-type BlogProps = {
-  blog: IBlog
-}
-
-const Blog = ({ blog }: BlogProps): JSX.Element => {
+const Blog = (): JSX.Element => {
   const dispatch = useDispatch()
 
+  const { id: blogId } = useParams<{ id: string }>()
+
+  const blog = useSelector((state: RootState) =>
+    state.blogs.blogs.find((blog) => blog.id === blogId)
+  )
+  const user = useSelector((state: RootState) => state.users.loggedInUser)
+
   const isLiking = useSelector((state: RootState) =>
-    state.blogs.liking.some((blogId) => blogId === blog.id)
+    state.blogs.liking.some((bId) => bId === blogId)
   )
 
-  const [showBlogDetails, setShowBlogDetails] = useState<boolean>(false)
-
-  const user = authService.getUser()
+  if (!blog) {
+    return (
+      <>
+        <p>Invalid blog!</p>
+      </>
+    )
+  }
 
   const like = (): void => {
     dispatch(likeBlog(blog))
   }
 
   return (
-    <div
-      style={{
-        padding: 10,
-        border: '1px solid #ddd',
-        marginBottom: 2,
-      }}
-    >
-      <span className='header'>
-        {blog.title} {blog.author}{' '}
-        <button onClick={(): void => setShowBlogDetails(!showBlogDetails)}>
-          {showBlogDetails ? 'Hide' : 'Show'} details
-        </button>
-      </span>
-      {showBlogDetails && (
-        <>
-          <ul>
-            <li>{blog.url}</li>
-            <li>
-              Likes: {blog.likes} <LikeButton like={like} isLiking={isLiking} />
-            </li>
-            <li>{blog.user.name}</li>
-          </ul>
+    <div>
+      <h2>
+        {blog.title} {blog.author}
+      </h2>
 
-          {user?.id && user.id === blog.user.id && (
-            <RemoveBlogButton blog={blog} />
-          )}
-        </>
-      )}
+      <p>
+        <a href={blog.url}>{blog.url}</a>
+      </p>
+      <p>
+        Likes: {blog.likes} <LikeButton like={like} isLiking={isLiking} />
+      </p>
+      <p>added by {blog.user.name}</p>
+
+      {user?.id && user.id === blog.user.id && <RemoveBlogButton blog={blog} />}
     </div>
   )
 }

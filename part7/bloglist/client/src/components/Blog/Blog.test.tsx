@@ -5,61 +5,72 @@ import { IBlog } from '../../interfaces/IBlog'
 
 import { Blog } from './Blog'
 
-describe('Blog component', () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let container: any
-  let mockBlog: IBlog
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: (): any => ({
+    id: '123',
+  }),
+}))
 
+const mockState = {
+  blogs: {
+    blogs: [
+      {
+        id: '123',
+        title: 'test-title',
+        author: 'test-author',
+        url: 'test-url',
+        likes: 42,
+        user: {
+          id: '321',
+          username: '',
+          name: 'Tester',
+        },
+      },
+    ],
+    liking: [],
+    removing: [],
+  },
+  users: {
+    loggedInUser: {
+      id: '321',
+    },
+  },
+}
+
+describe('Blog component', () => {
   let spyOnUseSelector
   let spyOnUseDispatch
 
   beforeEach(() => {
     spyOnUseSelector = jest.spyOn(redux, 'useSelector')
-    spyOnUseSelector.mockReturnValue([])
+    spyOnUseSelector.mockImplementation((callback) => callback(mockState))
 
     spyOnUseDispatch = jest.spyOn(redux, 'useDispatch')
     spyOnUseDispatch.mockReturnValue(jest.fn())
 
-    mockBlog = {
-      id: 'test-id',
-      title: 'test-title',
-      author: 'test-author',
-      url: 'test-url',
-      likes: 42,
-      user: {
-        id: '',
-        username: '',
-        name: '',
-      },
-    }
-    ;({ container } = render(<Blog blog={mockBlog} />))
+    render(<Blog />)
   })
 
   afterEach(() => {
     jest.restoreAllMocks()
   })
 
-  it('renders a blog without details', () => {
+  it('renders a blog with details', () => {
     expect(
-      screen.getByText(`${mockBlog.title} ${mockBlog.author}`)
+      screen.getByText(
+        `${mockState.blogs.blogs[0].title} ${mockState.blogs.blogs[0].author}`
+      )
     ).toBeInTheDocument()
-    expect(queryByText(container, mockBlog.url)).toBeFalsy()
-    expect(queryByText(container, mockBlog.likes)).toBeFalsy()
-  })
 
-  it('renders a blog with details after button clicked', () => {
-    expect(
-      screen.getByText(`${mockBlog.title} ${mockBlog.author}`)
-    ).toBeInTheDocument()
-    expect(queryByText(container, mockBlog.url)).toBeFalsy()
-    expect(queryByText(container, mockBlog.likes)).toBeFalsy()
-
-    fireEvent.click(screen.getByText('Show details'))
+    expect(screen.getByText(mockState.blogs.blogs[0].url)).toBeInTheDocument()
 
     expect(
-      screen.getByText(`${mockBlog.title} ${mockBlog.author}`)
+      screen.getByText(`Likes: ${mockState.blogs.blogs[0].likes}`)
     ).toBeInTheDocument()
-    expect(screen.getByText(mockBlog.url)).toBeInTheDocument()
-    expect(screen.getByText(`Likes: ${mockBlog.likes}`)).toBeInTheDocument()
+
+    expect(
+      screen.getByText(`added by ${mockState.blogs.blogs[0].user.name}`)
+    ).toBeInTheDocument()
   })
 })
