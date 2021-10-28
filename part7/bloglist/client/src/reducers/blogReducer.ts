@@ -10,6 +10,8 @@ enum BlogsActionType {
   LOADING_BLOGS = 'LOADING_BLOGS',
   LIKE_BLOG = 'LIKE_BLOG',
   LIKING_BLOG = 'LIKING_BLOG',
+  COMMENT_BLOG = 'COMMENT_BLOG',
+  COMMENTING_BLOG = 'COMMENTING_BLOG',
   REMOVE_BLOG = 'REMOVE_BLOG',
   REMOVING_BLOG = 'REMOVING_BLOG',
 }
@@ -19,6 +21,7 @@ interface BlogsState {
   loading: boolean
   liking: string[]
   removing: string[]
+  commenting: string[]
 }
 
 interface ILoadingBlogs {
@@ -41,6 +44,16 @@ interface ILikingBlog {
   data: { blog: IBlog; liking: boolean }
 }
 
+interface ICommentBlog {
+  type: BlogsActionType.COMMENT_BLOG
+  data: { blog: IBlog; comment: string }
+}
+
+interface ICommentingBlog {
+  type: BlogsActionType.COMMENTING_BLOG
+  data: { blog: IBlog; commenting: boolean }
+}
+
 interface IRemoveBlog {
   type: BlogsActionType.REMOVE_BLOG
   data: string
@@ -56,6 +69,8 @@ type BlogsActionInterfaces =
   | IInitializeBlogs
   | ILikeBlog
   | ILikingBlog
+  | ICommentBlog
+  | ICommentingBlog
   | IRemoveBlog
   | IRemovingBlog
 
@@ -64,6 +79,7 @@ const initialState: BlogsState = {
   loading: false,
   liking: [],
   removing: [],
+  commenting: [],
 }
 
 const blogReducer = (
@@ -118,6 +134,51 @@ const blogReducer = (
       return {
         ...state,
         liking,
+      }
+    }
+
+    case BlogsActionType.COMMENT_BLOG: {
+      const commentedBlog = state.blogs.find(
+        (blog) => blog.id === action.data.blog.id
+      )
+
+      if (commentedBlog) {
+        const updatedComments = [...(commentedBlog?.comments || [])]
+        updatedComments.push(action.data.comment)
+
+        const updatedBlog = {
+          ...commentedBlog,
+          comments: updatedComments,
+        }
+
+        return {
+          ...state,
+          blogs: state.blogs.map((blog) =>
+            blog.id !== action.data.blog.id ? blog : updatedBlog
+          ),
+        }
+      }
+
+      return state
+    }
+
+    case BlogsActionType.COMMENTING_BLOG: {
+      let commenting = [...state.commenting]
+
+      if (
+        action.data.commenting &&
+        (commenting.length === 0 || !commenting.includes(action.data.blog.id))
+      ) {
+        commenting.push(action.data.blog.id)
+      } else if (!action.data.commenting) {
+        commenting = commenting.filter(
+          (blogId) => blogId !== action.data.blog.id
+        )
+      }
+
+      return {
+        ...state,
+        commenting,
       }
     }
 
@@ -226,6 +287,43 @@ const setLikingBlog = (blog: IBlog, liking: boolean) => {
   }
 }
 
+const commentBlog = (blog: IBlog, comment: string) => {
+  return async (
+    dispatch: ThunkDispatch<RootState, void, ICommentBlog | IAddNotification>
+  ): Promise<void> => {
+    dispatch(setCommentingBlog(blog, true))
+
+    try {
+      await blogService.comment({ id: blog.id, comment })
+
+      dispatch({
+        type: BlogsActionType.COMMENT_BLOG,
+        data: { blog, comment },
+      })
+    } catch (error: any) {
+      dispatch(
+        addNotification({
+          message:
+            error?.response?.data?.error?.message ||
+            'Failed to update comments.',
+          type: 'error',
+        })
+      )
+    }
+
+    dispatch(setCommentingBlog(blog, false))
+  }
+}
+
+const setCommentingBlog = (blog: IBlog, commenting: boolean) => {
+  return (dispatch: ThunkDispatch<RootState, void, ICommentingBlog>): void => {
+    dispatch({
+      type: BlogsActionType.COMMENTING_BLOG,
+      data: { blog, commenting },
+    })
+  }
+}
+
 const removeBlog = (blog: IBlog) => {
   return async (
     dispatch: ThunkDispatch<RootState, void, IRemoveBlog | IAddNotification>
@@ -269,4 +367,4 @@ const setRemovingBlog = (blog: IBlog, removing: boolean) => {
   }
 }
 
-export { blogReducer, initializeBlogs, likeBlog, removeBlog }
+export { blogReducer, initializeBlogs, likeBlog, commentBlog, removeBlog }

@@ -30,6 +30,7 @@ const mockState = {
     ],
     liking: [],
     removing: [],
+    commenting: [],
   },
   users: {
     loggedInUser: {

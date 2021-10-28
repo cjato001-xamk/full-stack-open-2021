@@ -1,8 +1,9 @@
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 import { RootState } from '../../store'
-import { likeBlog } from '../../reducers/blogReducer'
+import { likeBlog, commentBlog } from '../../reducers/blogReducer'
 
 import { LikeButton } from '../LikeButton'
 import { RemoveBlogButton } from '../RemoveBlogButton'
@@ -21,6 +22,12 @@ const Blog = (): JSX.Element => {
     state.blogs.liking.some((bId) => bId === blogId)
   )
 
+  const isCommenting = useSelector((state: RootState) =>
+    state.blogs.commenting.some((bId) => bId === blogId)
+  )
+
+  const [comment, setComment] = useState<string>('')
+
   if (!blog) {
     return (
       <>
@@ -31,6 +38,10 @@ const Blog = (): JSX.Element => {
 
   const like = (): void => {
     dispatch(likeBlog(blog))
+  }
+
+  const commentHandler = (): void => {
+    dispatch(commentBlog(blog, comment))
   }
 
   return (
@@ -48,6 +59,15 @@ const Blog = (): JSX.Element => {
       <p>added by {blog.user.name}</p>
 
       <h3>Comments</h3>
+
+      <input
+        type='text'
+        value={comment}
+        onChange={(event): void => setComment(event.target.value)}
+      />
+      <button onClick={commentHandler} disabled={isCommenting}>
+        add comment
+      </button>
 
       <ul>
         {blog.comments?.map((comment, index) => (

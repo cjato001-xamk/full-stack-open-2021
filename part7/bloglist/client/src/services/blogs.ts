@@ -36,9 +36,27 @@ const like = async (update: {
   )
 }
 
+const comment = async ({
+  id,
+  comment,
+}: {
+  id: string
+  comment: string
+}): Promise<AxiosResponse<IApiResponse<null>>> => {
+  return await axios.patch(
+    `${baseUrl}/${id}/comments`,
+    { comment },
+    {
+      headers: {
+        Authorization: `Bearer ${authService.getToken()}`,
+      },
+    }
+  )
+}
+
 const remove = async (
   id: string
-): Promise<AxiosResponse<IApiResponse<IBlog>>> => {
+): Promise<AxiosResponse<IApiResponse<null>>> => {
   return await axios.delete(`${baseUrl}/${id}`, {
     headers: {
       Authorization: `Bearer ${authService.getToken()}`,
@@ -50,6 +68,7 @@ const blogService = {
   getAll,
   create,
   like,
+  comment,
   remove,
 }
 
