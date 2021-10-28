@@ -35,7 +35,7 @@ const Blogs = (): JSX.Element => {
           <ul id='blogs'>
             {blogs.map((blog) => (
               <li key={blog.id}>
-                <Link to={`blogs/${blog.id}`}>{blog.title}</Link>
+                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
               </li>
             ))}
           </ul>

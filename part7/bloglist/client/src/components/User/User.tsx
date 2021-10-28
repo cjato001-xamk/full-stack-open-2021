@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 
 import { RootState } from '../../store'
 import { IBlog } from '../../interfaces/IBlog'
@@ -31,7 +31,9 @@ const User = (): JSX.Element => {
               <ul>
                 {user.blogs?.map(
                   (blog: Pick<IBlog, 'id' | 'title' | 'url' | 'author'>) => (
-                    <li key={blog.id}>{blog.title}</li>
+                    <li key={blog.id}>
+                      <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                    </li>
                   )
                 )}
               </ul>
