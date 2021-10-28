@@ -6,6 +6,7 @@ export interface IBlog {
   url: string
   likes: number
   user: string
+  comments?: string[]
 }
 
 // IBlog + Mongoose Document
@@ -18,4 +19,5 @@ export interface IBlogClient {
   url: string
   likes: number
   user: string
+  comments?: string[]
 }

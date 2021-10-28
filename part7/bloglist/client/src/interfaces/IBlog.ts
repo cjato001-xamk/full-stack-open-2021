@@ -9,6 +9,7 @@ export interface IBlog {
     username: string
     name: string
   }
+  comments?: string[]
 }
 
 export type ICreateBlog = Pick<IBlog, 'title' | 'author' | 'url'>

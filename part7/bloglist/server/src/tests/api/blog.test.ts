@@ -236,6 +236,46 @@ describe('/api/blogs', () => {
     }, 10000)
   })
 
+  describe('PATCH /:id/comments', () => {
+    it('should push new comment', async () => {
+      await createMockUser(mockUsers[0])
+
+      const auth = await loginMockUserAndGetAuth(
+        api,
+        mockUsers[0].username,
+        mockUsers[0].password
+      )
+
+      await api
+        .post('/api/blogs')
+        .send(mockBlogs[0])
+        .set('Authorization', 'Bearer ' + auth?.token)
+        .expect(200)
+
+      const getBlogs = await api
+        .get('/api/blogs')
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.data).toHaveLength(1)
+          expect(res.body.data[0].likes).toEqual(7)
+        })
+
+      await api
+        .patch(`/api/blogs/${getBlogs.body.data[0].id}/comments`)
+        .set('Authorization', 'Bearer ' + auth?.token)
+        .send({ comment: 'test-comment' })
+        .expect(204)
+
+      await api
+        .get('/api/blogs')
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.data).toHaveLength(1)
+          expect(res.body.data[0].comments).toEqual(['test-comment'])
+        })
+    })
+  })
+
   describe('PATCH /:id', () => {
     it('should update likes', async () => {
       await createMockUser(mockUsers[0])
@@ -262,6 +302,7 @@ describe('/api/blogs', () => {
 
       await api
         .patch(`/api/blogs/${getBlogs.body.data[0].id}`)
+        .set('Authorization', 'Bearer ' + auth?.token)
         .send({ likes: 11 })
         .expect(204)
 

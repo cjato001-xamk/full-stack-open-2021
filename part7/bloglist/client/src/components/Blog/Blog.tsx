@@ -47,6 +47,14 @@ const Blog = (): JSX.Element => {
       </p>
       <p>added by {blog.user.name}</p>
 
+      <h3>Comments</h3>
+
+      <ul>
+        {blog.comments?.map((comment, index) => (
+          <li key={index}>{comment}</li>
+        ))}
+      </ul>
+
       {user?.id && user.id === blog.user.id && <RemoveBlogButton blog={blog} />}
     </div>
   )

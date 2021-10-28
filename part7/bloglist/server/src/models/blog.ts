@@ -25,6 +25,9 @@ const blogSchemaFields: Record<keyof IBlog, SchemaDefinitionProperty> = {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
+  comments: {
+    type: [String],
+  },
 }
 
 const blogSchema = new Schema(blogSchemaFields, {

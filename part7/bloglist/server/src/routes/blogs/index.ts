@@ -28,7 +28,11 @@ blogs.get(
   async (req: Request, res: Response<IApiResponse<IBlogClient>>) => {
     const { id } = req.params
 
-    const blog = await Blog.findOne({ _id: id })
+    const blog = await Blog.findOne({ _id: id }).populate('user', {
+      username: 1,
+      name: 1,
+      id: 1,
+    })
 
     if (blog) {
       return res.json({
@@ -101,8 +105,43 @@ blogs.post(
 )
 
 blogs.patch(
+  '/:id/comments',
+  tokenExtractor,
+  userExtractor,
+  async (req: Request, res: Response<IApiResponse<null>>) => {
+    const { token, decodedToken, user } = req
+
+    if (!token || !decodedToken) {
+      throw new JsonWebTokenError('Invalid or missing token.')
+    }
+
+    if (!user) {
+      return res.status(401).json({ error: { message: 'User not found.' } })
+    }
+
+    const { id } = req.params
+    const { comment } = req.body
+    await Blog.findByIdAndUpdate(id, { $push: { comments: comment } })
+
+    return res.status(204).json({})
+  }
+)
+
+blogs.patch(
   '/:id',
-  async (req: Request, res: Response<IApiResponse<IBlogClient>>) => {
+  tokenExtractor,
+  userExtractor,
+  async (req: Request, res: Response<IApiResponse<null>>) => {
+    const { token, decodedToken, user } = req
+
+    if (!token || !decodedToken) {
+      throw new JsonWebTokenError('Invalid or missing token.')
+    }
+
+    if (!user) {
+      return res.status(401).json({ error: { message: 'User not found.' } })
+    }
+
     const { id } = req.params
     await Blog.findByIdAndUpdate(id, req.body)
 

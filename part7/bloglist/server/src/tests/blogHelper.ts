@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 import { IBlogMock, IAuthorBlogs, IAuthorLikes } from './mocker'
 
 const countTotalLikes = (blogs: IBlogMock[]): number => {
