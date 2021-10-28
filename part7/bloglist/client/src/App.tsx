@@ -10,6 +10,7 @@ import { initializeUsers } from './reducers/userReducer'
 import { login, logout } from './reducers/userReducer'
 import { RootState } from './store'
 
+import { Nav } from './components/Nav'
 import { Blogs } from './components/Blogs'
 import { Blog } from './components/Blog'
 import { Login } from './components/Login'
@@ -47,6 +48,7 @@ const App = (): JSX.Element => {
         <Login />
       ) : (
         <>
+          <Nav />
           <p>
             You are logged in as {user.name}.{' '}
             <LogoutButton logout={logoutHandler} />
