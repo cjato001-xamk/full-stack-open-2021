@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { Alert, ListGroup, Form, Row, Col, Button } from 'react-bootstrap'
 
 import { RootState } from '../../store'
 import { likeBlog, commentBlog } from '../../reducers/blogReducer'
@@ -29,11 +30,7 @@ const Blog = (): JSX.Element => {
   const [comment, setComment] = useState<string>('')
 
   if (!blog) {
-    return (
-      <>
-        <p>Invalid blog!</p>
-      </>
-    )
+    return <Alert variant='danger'>Invalid blog!</Alert>
   }
 
   const like = (): void => {
@@ -42,41 +39,63 @@ const Blog = (): JSX.Element => {
 
   const commentHandler = (): void => {
     dispatch(commentBlog(blog, comment))
+
+    setComment('')
   }
 
   return (
-    <div>
-      <h2>
+    <>
+      <h1>
         {blog.title} {blog.author}
-      </h2>
+      </h1>
 
       <p>
-        <a href={blog.url}>{blog.url}</a>
+        <span className='text-muted'>Added by: </span>
+        {blog.user.name}{' '}
+        <span className='ps-4'>
+          <a href={blog.url}>{blog.url}</a>
+        </span>
       </p>
-      <p>
-        Likes: {blog.likes} <LikeButton like={like} isLiking={isLiking} />
-      </p>
-      <p>added by {blog.user.name}</p>
 
-      <h3>Comments</h3>
-
-      <input
-        type='text'
-        value={comment}
-        onChange={(event): void => setComment(event.target.value)}
-      />
-      <button onClick={commentHandler} disabled={isCommenting}>
-        add comment
-      </button>
-
-      <ul>
-        {blog.comments?.map((comment, index) => (
-          <li key={index}>{comment}</li>
-        ))}
-      </ul>
-
+      <LikeButton like={like} isLiking={isLiking} likes={blog.likes} />
       {user?.id && user.id === blog.user.id && <RemoveBlogButton blog={blog} />}
-    </div>
+
+      <h4 className='mt-4'>Comments</h4>
+
+      <Form>
+        <Row className='align-items-center'>
+          <Col xs='auto' className='my-1'>
+            <Form.Control
+              type='text'
+              value={comment}
+              onChange={(event): void => setComment(event.target.value)}
+            />
+          </Col>
+          <Col xs='auto' className='my-1'>
+            <Button
+              variant='primary'
+              type='submit'
+              onClick={commentHandler}
+              disabled={isCommenting}
+            >
+              Add comment
+            </Button>
+          </Col>
+        </Row>
+      </Form>
+
+      {blog.comments?.length !== 0 ? (
+        <ListGroup variant='flush'>
+          {blog.comments?.map((comment, index) => (
+            <ListGroup.Item key={index}>{comment}</ListGroup.Item>
+          ))}
+        </ListGroup>
+      ) : (
+        <Alert variant='info' className='mt-2'>
+          Be first to comment?
+        </Alert>
+      )}
+    </>
   )
 }
 

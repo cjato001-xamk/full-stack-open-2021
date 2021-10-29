@@ -1,16 +1,17 @@
 import { render, screen } from '@testing-library/react'
+import { BrowserRouter as Router } from 'react-router-dom'
 import * as redux from 'react-redux'
 
-import { CreateBlog } from './CreateBlog'
+import { Navigation } from './Navigation'
 
-describe('CreateBlog component', () => {
+describe('Navigation component', () => {
   let spyOnUseSelector
   let spyOnUseDispatch
 
   beforeEach(() => {
     spyOnUseSelector = jest.spyOn(redux, 'useSelector')
     spyOnUseSelector.mockImplementation((callback) =>
-      callback({ blogs: { creating: false } })
+      callback({ users: { loggedInUser: { name: 'Janne' } } })
     )
 
     spyOnUseDispatch = jest.spyOn(redux, 'useDispatch')
@@ -21,9 +22,14 @@ describe('CreateBlog component', () => {
     jest.restoreAllMocks()
   })
 
-  it('should render', () => {
-    render(<CreateBlog setShowCreateBlog={jest.fn()} />)
+  it('renders navigation', () => {
+    render(
+      <Router>
+        <Navigation />
+      </Router>
+    )
 
-    expect(screen.getByText('Create new blog')).toBeInTheDocument()
+    expect(screen.getByText('Blogs')).toBeInTheDocument()
+    expect(screen.getByText('Users')).toBeInTheDocument()
   })
 })

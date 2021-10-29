@@ -1,7 +1,5 @@
-import { queryByText, render, screen, fireEvent } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import * as redux from 'react-redux'
-
-import { IBlog } from '../../interfaces/IBlog'
 
 import { Blog } from './Blog'
 
@@ -66,12 +64,12 @@ describe('Blog component', () => {
 
     expect(screen.getByText(mockState.blogs.blogs[0].url)).toBeInTheDocument()
 
-    expect(
-      screen.getByText(`Likes: ${mockState.blogs.blogs[0].likes}`)
-    ).toBeInTheDocument()
+    expect(screen.getByText('Like')).toBeInTheDocument()
+    expect(screen.getByText(mockState.blogs.blogs[0].likes)).toBeInTheDocument()
 
+    expect(screen.getByText('Added by:')).toBeInTheDocument()
     expect(
-      screen.getByText(`added by ${mockState.blogs.blogs[0].user.name}`)
+      screen.getByText(mockState.blogs.blogs[0].user.name)
     ).toBeInTheDocument()
   })
 })

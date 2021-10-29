@@ -1,5 +1,3 @@
-import './App.css'
-
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
@@ -7,14 +5,13 @@ import { Switch, Route } from 'react-router-dom'
 import { authService } from './services/auth'
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUsers } from './reducers/userReducer'
-import { login, logout } from './reducers/userReducer'
+import { login } from './reducers/userReducer'
 import { RootState } from './store'
 
-import { Nav } from './components/Nav'
+import { Navigation } from './components/Navigation'
 import { Blogs } from './components/Blogs'
 import { Blog } from './components/Blog'
 import { Login } from './components/Login'
-import { LogoutButton } from './components/LogoutButton'
 import { Notification } from './components/Notification'
 import { Users } from './components/Users'
 import { User } from './components/User'
@@ -36,23 +33,15 @@ const App = (): JSX.Element => {
     }
   }, [dispatch, user])
 
-  const logoutHandler = (): void => {
-    dispatch(logout())
-  }
-
   return (
-    <div>
+    <div className='container'>
       <Notification />
 
       {!user ? (
         <Login />
       ) : (
         <>
-          <Nav />
-          <p>
-            You are logged in as {user.name}.{' '}
-            <LogoutButton logout={logoutHandler} />
-          </p>
+          <Navigation />
 
           <Switch>
             <Route path='/users/:id'>

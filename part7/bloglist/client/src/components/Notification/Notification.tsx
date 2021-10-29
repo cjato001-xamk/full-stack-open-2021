@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Toast, ToastContainer } from 'react-bootstrap'
 
 import { RootState } from '../../store'
 import { removeNotification } from '../../reducers/notificationReducer'
@@ -26,7 +27,16 @@ const Notification = (): JSX.Element | null => {
   }, [dispatch, notification])
 
   return notification ? (
-    <p className={notification.type}>{notification.message}</p>
+    <ToastContainer position='bottom-center'>
+      <Toast bg={notification.type === 'error' ? 'danger' : 'success'}>
+        <Toast.Header closeButton={false}>
+          <strong className='me-auto'>
+            {notification.type === 'error' ? 'Error occurred!' : 'Whuhuu!'}
+          </strong>
+        </Toast.Header>
+        <Toast.Body>{notification.message}</Toast.Body>
+      </Toast>
+    </ToastContainer>
   ) : null
 }
 

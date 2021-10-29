@@ -1,10 +1,11 @@
 import { useSelector } from 'react-redux'
-import { useParams, Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { Alert } from 'react-bootstrap'
 
 import { RootState } from '../../store'
-import { IBlog } from '../../interfaces/IBlog'
 
 import { Loading } from '../Loading'
+import { BlogList } from '../BlogList'
 
 const User = (): JSX.Element => {
   const { id: userId } = useParams<{ id: string }>()
@@ -26,20 +27,12 @@ const User = (): JSX.Element => {
             <>
               <h1>{user.name}</h1>
 
-              <h2>Added blogs</h2>
+              <h3>Added blogs</h3>
 
-              <ul>
-                {user.blogs?.map(
-                  (blog: Pick<IBlog, 'id' | 'title' | 'url' | 'author'>) => (
-                    <li key={blog.id}>
-                      <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-                    </li>
-                  )
-                )}
-              </ul>
+              <BlogList blogs={user.blogs} />
             </>
           ) : (
-            <h1>Invalid user</h1>
+            <Alert variant='danger'>Invalid user</Alert>
           )}
         </>
       )}

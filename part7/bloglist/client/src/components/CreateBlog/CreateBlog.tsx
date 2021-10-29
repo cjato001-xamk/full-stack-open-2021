@@ -1,101 +1,81 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { Form, Button } from 'react-bootstrap'
 
-import { blogService } from '../../services/blogs'
-import { addNotification } from '../../reducers/notificationReducer'
+import { RootState } from '../../store'
+import { createBlog } from '../../reducers/blogReducer'
 
 type CreateBlogProps = {
-  // refreshBlogs: () => void // FIXME
   setShowCreateBlog: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const CreateBlog = ({
-  // refreshBlogs, // FIXME
-  setShowCreateBlog,
-}: CreateBlogProps): JSX.Element => {
+const CreateBlog = ({ setShowCreateBlog }: CreateBlogProps): JSX.Element => {
   const dispatch = useDispatch()
+
+  const isSubmitting = useSelector((state: RootState) => state.blogs.creating)
 
   const [title, setTitle] = useState<string>('')
   const [author, setAuthor] = useState<string>('')
   const [url, setUrl] = useState<string>('')
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault()
 
-    setIsSubmitting(true)
+    dispatch(createBlog(title, author, url))
 
-    blogService
-      .create({ title, author, url })
-      .then(() => {
-        dispatch(
-          addNotification({
-            message: `A new blog "${title}" by "${author}" added.`,
-            type: 'success',
-          })
-        )
-
-        setIsSubmitting(false)
-
-        setTitle('')
-        setAuthor('')
-        setUrl('')
-
-        //refreshBlogs() // FIXME
-
-        setShowCreateBlog(false)
-      })
-      .catch((error) => {
-        dispatch(
-          addNotification({
-            message:
-              error?.response?.data?.error?.message || 'Failed to create blog.',
-            type: 'error',
-          })
-        )
-
-        setIsSubmitting(false)
-      })
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+    setShowCreateBlog(false)
   }
 
   return (
     <>
-      <h2>Create new blog</h2>
+      <h3>Create new blog</h3>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          Title:
-          <input
+      <Form onSubmit={handleSubmit} className='mb-4'>
+        <Form.Group className='mb-3'>
+          <Form.Label>Title</Form.Label>
+          <Form.Control
             type='text'
             value={title}
             name='title'
             onChange={({ target }): void => setTitle(target.value)}
           />
-        </div>
-        <div>
-          Author:
-          <input
+        </Form.Group>
+
+        <Form.Group className='mb-3'>
+          <Form.Label>Author</Form.Label>
+          <Form.Control
             type='text'
             value={author}
             name='author'
             onChange={({ target }): void => setAuthor(target.value)}
           />
-        </div>
-        <div>
-          Url:
-          <input
+        </Form.Group>
+
+        <Form.Group className='mb-3'>
+          <Form.Label>Url</Form.Label>
+          <Form.Control
             type='text'
             value={url}
             name='url'
             onChange={({ target }): void => setUrl(target.value)}
           />
-        </div>
+        </Form.Group>
 
-        <button type='submit' disabled={isSubmitting}>
+        <Button variant='primary' type='submit' disabled={isSubmitting}>
           {!isSubmitting ? 'Create' : 'Creating...'}
-        </button>
-        <button onClick={(): void => setShowCreateBlog(false)}>Close</button>
-      </form>
+        </Button>
+
+        <Button
+          variant='link'
+          type='submit'
+          onClick={(): void => setShowCreateBlog(false)}
+        >
+          Close
+        </Button>
+      </Form>
     </>
   )
 }

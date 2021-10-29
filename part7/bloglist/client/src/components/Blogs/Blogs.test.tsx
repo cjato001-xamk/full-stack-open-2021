@@ -22,6 +22,6 @@ describe('Blogs component', () => {
   it('should show as loading state', () => {
     render(<Blogs />)
 
-    expect(screen.getByText('Loading...')).toBeInTheDocument()
+    expect(screen.getByText('Create new')).toBeInTheDocument()
   })
 })

@@ -14,6 +14,8 @@ enum BlogsActionType {
   COMMENTING_BLOG = 'COMMENTING_BLOG',
   REMOVE_BLOG = 'REMOVE_BLOG',
   REMOVING_BLOG = 'REMOVING_BLOG',
+  CREATE_BLOG = 'CREATE_BLOG',
+  CREATING_BLOG = 'CREATING_BLOG',
 }
 
 interface BlogsState {
@@ -22,6 +24,7 @@ interface BlogsState {
   liking: string[]
   removing: string[]
   commenting: string[]
+  creating: boolean
 }
 
 interface ILoadingBlogs {
@@ -64,6 +67,16 @@ interface IRemovingBlog {
   data: { blog: IBlog; removing: boolean }
 }
 
+interface ICreateBlog {
+  type: BlogsActionType.CREATE_BLOG
+  data: IBlog
+}
+
+interface ICreatingBlog {
+  type: BlogsActionType.CREATING_BLOG
+  data: boolean
+}
+
 type BlogsActionInterfaces =
   | ILoadingBlogs
   | IInitializeBlogs
@@ -73,6 +86,8 @@ type BlogsActionInterfaces =
   | ICommentingBlog
   | IRemoveBlog
   | IRemovingBlog
+  | ICreateBlog
+  | ICreatingBlog
 
 const initialState: BlogsState = {
   blogs: [],
@@ -80,6 +95,7 @@ const initialState: BlogsState = {
   liking: [],
   removing: [],
   commenting: [],
+  creating: false,
 }
 
 const blogReducer = (
@@ -182,6 +198,7 @@ const blogReducer = (
       }
     }
 
+    // FIXME: Should also remove from state->users->blogs (or reload users)
     case BlogsActionType.REMOVE_BLOG: {
       const filteredBlogs = [...state.blogs].filter(
         (blog) => blog.id !== action.data
@@ -206,6 +223,19 @@ const blogReducer = (
         removing,
       }
     }
+
+    case BlogsActionType.CREATE_BLOG: {
+      const blogs = [...state.blogs]
+      blogs.push(action.data)
+
+      return { ...state, blogs }
+    }
+
+    case BlogsActionType.CREATING_BLOG:
+      return {
+        ...state,
+        creating: action.data,
+      }
 
     default:
       return state
@@ -367,4 +397,56 @@ const setRemovingBlog = (blog: IBlog, removing: boolean) => {
   }
 }
 
-export { blogReducer, initializeBlogs, likeBlog, commentBlog, removeBlog }
+const createBlog = (author: string, title: string, url: string) => {
+  return async (
+    dispatch: ThunkDispatch<RootState, void, ICreateBlog | IAddNotification>
+  ): Promise<void> => {
+    dispatch(setCreatingBlog(true))
+
+    try {
+      const blog = await blogService.create({ title, author, url })
+
+      if (blog.data.data) {
+        dispatch({
+          type: BlogsActionType.CREATE_BLOG,
+          data: blog.data.data,
+        })
+
+        dispatch(
+          addNotification({
+            message: `Blog ${title} created.`,
+            type: 'success',
+          })
+        )
+      }
+    } catch (error: any) {
+      dispatch(
+        addNotification({
+          message:
+            error?.response?.data?.error?.message || 'Failed to create blog.',
+          type: 'error',
+        })
+      )
+    }
+
+    dispatch(setCreatingBlog(false))
+  }
+}
+
+const setCreatingBlog = (creating: boolean) => {
+  return (dispatch: ThunkDispatch<RootState, void, ICreatingBlog>): void => {
+    dispatch({
+      type: BlogsActionType.CREATING_BLOG,
+      data: creating,
+    })
+  }
+}
+
+export {
+  blogReducer,
+  initializeBlogs,
+  likeBlog,
+  commentBlog,
+  removeBlog,
+  createBlog,
+}

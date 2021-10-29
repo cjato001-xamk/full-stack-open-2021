@@ -1,5 +1,9 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
+import { Button, Alert } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash, faBan } from '@fortawesome/free-solid-svg-icons'
 
 import { RootState } from '../../store'
 import { IBlog } from '../../interfaces/IBlog'
@@ -11,6 +15,7 @@ type RemoveBlogButtonProps = {
 
 const RemoveBlogButton = ({ blog }: RemoveBlogButtonProps): JSX.Element => {
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const isRemoving = useSelector((state: RootState) =>
     state.blogs.removing.some((blogId) => blogId === blog.id)
@@ -20,25 +25,34 @@ const RemoveBlogButton = ({ blog }: RemoveBlogButtonProps): JSX.Element => {
 
   const removeHandler = (): void => {
     dispatch(removeBlog(blog))
+
+    history.push('/')
   }
 
   return (
-    <>
+    <div className='mt-4'>
       {!areYouSure ? (
-        <button onClick={(): void => setAreYouSure(true)}>Remove</button>
+        <Button variant='dark' onClick={(): void => setAreYouSure(true)}>
+          <FontAwesomeIcon icon={faTrash} /> Remove
+        </Button>
       ) : (
         <>
           {!isRemoving ? (
             <span>
-              Are you sure? <button onClick={removeHandler}>Yes</button>{' '}
-              <button onClick={(): void => setAreYouSure(false)}>Cancel</button>
+              Are you sure?{' '}
+              <Button onClick={removeHandler} variant='danger'>
+                <FontAwesomeIcon icon={faTrash} /> Yes
+              </Button>{' '}
+              <Button onClick={(): void => setAreYouSure(false)}>
+                <FontAwesomeIcon icon={faBan} /> Cancel
+              </Button>
             </span>
           ) : (
-            <span>Removing...</span>
+            <Alert variant='info'>Removing...</Alert>
           )}
         </>
       )}
-    </>
+    </div>
   )
 }
 

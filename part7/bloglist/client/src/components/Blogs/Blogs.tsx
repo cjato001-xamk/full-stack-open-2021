@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Button } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import { RootState } from '../../store'
 
 import { CreateBlog } from '../CreateBlog'
 import { Loading } from '../Loading'
+import { BlogList } from '../BlogList'
 
 const Blogs = (): JSX.Element => {
   const blogs = useSelector((state: RootState) =>
@@ -16,15 +19,15 @@ const Blogs = (): JSX.Element => {
   const [showCreateBlog, setShowCreateBlog] = useState<boolean>(false)
 
   return (
-    <div>
-      <h2>
+    <>
+      <h1>
         Blogs{' '}
         {!showCreateBlog && (
-          <button onClick={(): void => setShowCreateBlog(true)}>
-            + Create new
-          </button>
+          <Button onClick={(): void => setShowCreateBlog(true)}>
+            <FontAwesomeIcon icon={faPlus} /> Create new
+          </Button>
         )}
-      </h2>
+      </h1>
 
       {showCreateBlog && <CreateBlog setShowCreateBlog={setShowCreateBlog} />}
 
@@ -32,17 +35,11 @@ const Blogs = (): JSX.Element => {
         <Loading />
       ) : (
         <>
-          <ul id='blogs'>
-            {blogs.map((blog) => (
-              <li key={blog.id}>
-                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-              </li>
-            ))}
-          </ul>
-          {isLoading && <p>Updating bloglist...</p>}
+          {!showCreateBlog && <BlogList blogs={blogs} />}
+          {isLoading && <p className='text-muted'>Updating bloglist...</p>}
         </>
       )}
-    </div>
+    </>
   )
 }
 

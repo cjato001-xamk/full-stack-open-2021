@@ -1,8 +1,10 @@
 const Loading = (): JSX.Element => {
   return (
-    <>
-      <p>Loading...</p>
-    </>
+    <span
+      className='spinner-border text-info'
+      role='status'
+      data-testid='loading-component'
+    ></span>
   )
 }
 

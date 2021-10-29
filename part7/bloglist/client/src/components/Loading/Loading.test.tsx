@@ -5,6 +5,6 @@ describe('Loading component', () => {
   it('should render', () => {
     render(<Loading />)
 
-    expect(screen.getByText('Loading...')).toBeInTheDocument()
+    expect(screen.getByTestId('loading-component')).toBeInTheDocument()
   })
 })

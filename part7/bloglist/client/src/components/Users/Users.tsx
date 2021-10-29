@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { Table } from 'react-bootstrap'
 
 import { RootState } from '../../store'
 
@@ -16,26 +17,24 @@ const Users = (): JSX.Element => {
       {isLoading ? (
         <Loading />
       ) : (
-        <>
-          <table>
-            <thead>
-              <tr>
-                <td></td>
-                <td>Blogs created</td>
+        <Table>
+          <thead>
+            <tr>
+              <td></td>
+              <td>Blogs created</td>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>
+                  <Link to={`/users/${user.id}`}>{user.name}</Link>
+                </td>
+                <td>{user.blogs?.length || 0}</td>
               </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => (
-                <tr key={user.id}>
-                  <td>
-                    <Link to={`/users/${user.id}`}>{user.name}</Link>
-                  </td>
-                  <td>{user.blogs?.length || 0}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </>
+            ))}
+          </tbody>
+        </Table>
       )}
     </>
   )

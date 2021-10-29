@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Form, Button } from 'react-bootstrap'
 
 import { RootState } from '../../store'
 import { login } from '../../reducers/userReducer'
@@ -21,31 +22,35 @@ const Login = (): JSX.Element => {
 
   return (
     <>
-      <h2>Login</h2>
+      <h1 className='mt-4'>Login</h1>
 
-      <form onSubmit={handleLogin}>
-        <div>
-          Username:
-          <input
+      <Form onSubmit={handleLogin}>
+        <Form.Group className='mb-3'>
+          <Form.Label>Username</Form.Label>
+          <Form.Control
             type='text'
+            placeholder='Enter username'
             value={username}
             name='username'
             onChange={({ target }): void => setUsername(target.value)}
           />
-        </div>
-        <div>
-          Password:
-          <input
+        </Form.Group>
+
+        <Form.Group className='mb-3'>
+          <Form.Label>Password</Form.Label>
+          <Form.Control
             type='password'
+            placeholder='Password'
             value={password}
             name='password'
             onChange={({ target }): void => setPassword(target.value)}
           />
-        </div>
-        <button type='submit' disabled={authInProgress}>
+        </Form.Group>
+
+        <Button variant='primary' type='submit' disabled={authInProgress}>
           {!authInProgress ? 'Login' : 'Logging in...'}
-        </button>
-      </form>
+        </Button>
+      </Form>
     </>
   )
 }
