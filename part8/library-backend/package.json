@@ -5,10 +5,14 @@
   "author": "Janne Toikander",
   "license": "MIT",
   "scripts": {
+    "dev": "nodemon index.js",
     "start": "node index.js"
   },
   "dependencies": {
     "apollo-server": "^3.4.0",
     "graphql": "^16.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.14"
   }
 }
