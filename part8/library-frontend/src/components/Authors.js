@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client'
 import { ALL_AUTHORS } from '../graphql/queries'
 
 import { Loading } from './Loading'
-import { AuthorUpdate } from './AuthorUpdate'
+import { AuthorBirthyearInlineUpdate } from './AuthorBirthyearInlineUpdate'
 
 const Authors = (props) => {
   const authors = useQuery(ALL_AUTHORS)
@@ -28,17 +28,21 @@ const Authors = (props) => {
             <th>born</th>
             <th>books</th>
           </tr>
-          {authors.data.allAuthors.map((a) => (
-            <tr key={a.id}>
-              <td>{a.name}</td>
-              <td>{a.born}</td>
-              <td>{a.bookCount}</td>
+          {authors.data.allAuthors.map((author) => (
+            <tr key={author.id}>
+              <td>{author.name}</td>
+              <td>
+                {author.born ? (
+                  author.born
+                ) : (
+                  <AuthorBirthyearInlineUpdate author={author} />
+                )}
+              </td>
+              <td>{author.bookCount}</td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      <AuthorUpdate />
     </div>
   )
 }
