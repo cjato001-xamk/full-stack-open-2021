@@ -4,6 +4,7 @@ import { useQuery } from '@apollo/client'
 import { ALL_AUTHORS } from '../graphql/queries'
 
 import { Loading } from './Loading'
+import { AuthorUpdate } from './AuthorUpdate'
 
 const Authors = (props) => {
   const authors = useQuery(ALL_AUTHORS)
@@ -36,6 +37,8 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
+
+      <AuthorUpdate />
     </div>
   )
 }
