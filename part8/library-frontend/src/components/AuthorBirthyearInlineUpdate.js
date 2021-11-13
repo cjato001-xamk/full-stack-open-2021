@@ -17,7 +17,7 @@ const AuthorBirthyearInlineUpdate = ({ author }) => {
 
     if (/[1-2][0-9]{3}/.test(born)) {
       editAuthor({
-        variables: { name: author.name, setBornTo: parseInt(born) },
+        variables: { authorId: author.authorId, setBornTo: parseInt(born) },
       })
     } else {
       setError(true)

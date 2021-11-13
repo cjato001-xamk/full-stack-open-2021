@@ -29,7 +29,7 @@ const Authors = (props) => {
             <th>books</th>
           </tr>
           {authors.data.allAuthors.map((author) => (
-            <tr key={author.id}>
+            <tr key={author.authorId}>
               <td>{author.name}</td>
               <td>
                 {author.born ? (

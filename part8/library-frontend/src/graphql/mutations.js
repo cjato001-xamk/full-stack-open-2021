@@ -13,16 +13,16 @@ const ADD_BOOK = gql`
       published: $published
       genres: $genres
     ) {
-      id
+      bookId
       title
     }
   }
 `
 
 const EDIT_AUTHOR = gql`
-  mutation editAuthor($name: String!, $setBornTo: Int!) {
-    editAuthor(name: $name, setBornTo: $setBornTo) {
-      id
+  mutation editAuthor($authorId: String!, $setBornTo: Int!) {
+    editAuthor(authorId: $authorId, setBornTo: $setBornTo) {
+      authorId
       name
     }
   }
