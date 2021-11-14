@@ -5,10 +5,10 @@ import { ALL_BOOKS } from '../graphql/queries'
 
 import { Loading } from './Loading'
 
-const Books = (props) => {
+const Books = ({ show }) => {
   const books = useQuery(ALL_BOOKS)
 
-  if (!props.show) {
+  if (!show) {
     return null
   }
 

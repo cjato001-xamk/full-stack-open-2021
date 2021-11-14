@@ -6,10 +6,10 @@ import { ALL_AUTHORS } from '../graphql/queries'
 import { Loading } from './Loading'
 import { AuthorBirthyearInlineUpdate } from './AuthorBirthyearInlineUpdate'
 
-const Authors = (props) => {
+const Authors = ({ show, handleError }) => {
   const authors = useQuery(ALL_AUTHORS)
 
-  if (!props.show) {
+  if (!show) {
     return null
   }
 
@@ -35,7 +35,10 @@ const Authors = (props) => {
                 {author.born ? (
                   author.born
                 ) : (
-                  <AuthorBirthyearInlineUpdate author={author} />
+                  <AuthorBirthyearInlineUpdate
+                    author={author}
+                    handleError={handleError}
+                  />
                 )}
               </td>
               <td>{author.bookCount}</td>

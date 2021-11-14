@@ -1,4 +1,4 @@
-import { ApolloServer, gql } from 'apollo-server'
+import { ApolloServer, gql, UserInputError } from 'apollo-server'
 import { v4 as uuid } from 'uuid'
 import mongoose from 'mongoose'
 import {} from 'dotenv/config'
@@ -110,7 +110,12 @@ const resolvers = {
           name: args.author,
           authorId: newAuthorId,
         })
-        await author.save()
+
+        try {
+          await author.save()
+        } catch (error) {
+          throw new UserInputError(error.message, { args })
+        }
       }
 
       const newBookId = uuid()
@@ -120,7 +125,13 @@ const resolvers = {
         bookId: newBookId,
         authorId: newAuthorId,
       })
-      await book.save()
+
+      try {
+        await book.save()
+      } catch (error) {
+        throw new UserInputError(error.message, { args })
+      }
+
       return book.populate('author')
     },
     editAuthor: async (root, args) => {
@@ -130,13 +141,17 @@ const resolvers = {
         return null
       }
 
-      const updatedAuthor = await Author.findOneAndUpdate(
-        { authorId: author.authorId },
-        { born: args.setBornTo },
-        { new: true }
-      )
+      try {
+        const updatedAuthor = await Author.findOneAndUpdate(
+          { authorId: author.authorId },
+          { born: args.setBornTo },
+          { new: true }
+        )
 
-      return updatedAuthor
+        return updatedAuthor
+      } catch (error) {
+        throw new UserInputError(error.message, { args })
+      }
     },
   },
 }
