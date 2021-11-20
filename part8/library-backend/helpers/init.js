@@ -1,7 +1,8 @@
 import { Author } from '../models/author.js'
 import { Book } from '../models/book.js'
+import { User } from '../models/user.js'
 
-let authorsData = [
+const authorsData = [
   {
     name: 'Robert Martin',
     authorId: 'afa51ab0-344d-11e9-a414-719c6709cf3e',
@@ -27,7 +28,7 @@ let authorsData = [
   },
 ]
 
-let booksData = [
+const booksData = [
   {
     title: 'Clean Code',
     published: 2008,
@@ -79,15 +80,21 @@ let booksData = [
   },
 ]
 
+const usersData = [
+  { userId: 'd7a14056-9a67-4903-afe7-af6d51367a43', username: 'aramis' },
+]
+
 // Seed database if it's empty
 const seedDB = async () => {
   const authors = await Author.find({})
   const books = await Book.find({})
+  const users = await User.find({})
 
-  if (!authors.length && !books.length) {
+  if (!authors.length && !books.length && !users.length) {
     try {
       await Author.create(authorsData)
       await Book.create(booksData)
+      await User.create(usersData)
 
       console.log('Database seeded.')
     } catch {
