@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client'
 import { ALL_BOOKS, ALL_AUTHORS } from '../graphql/queries'
 import { ADD_BOOK } from '../graphql/mutations'
 
-const NewBook = ({ show, handleError }) => {
+const NewBook = ({ show, handleError, setPage }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [published, setPublished] = useState('')
@@ -34,6 +34,8 @@ const NewBook = ({ show, handleError }) => {
     setAuthor('')
     setGenres([])
     setGenre('')
+
+    setPage('books')
   }
 
   const addGenre = () => {

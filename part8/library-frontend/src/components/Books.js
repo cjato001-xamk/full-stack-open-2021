@@ -27,7 +27,7 @@ const Books = ({ show }) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {books.data.allBooks.map((book) => (
+          {books.data?.allBooks.map((book) => (
             <tr key={book.bookId}>
               <td>{book.title}</td>
               <td>{book.author.name}</td>

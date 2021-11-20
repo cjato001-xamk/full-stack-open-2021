@@ -6,7 +6,7 @@ import { ALL_AUTHORS } from '../graphql/queries'
 import { Loading } from './Loading'
 import { AuthorBirthyearInlineUpdate } from './AuthorBirthyearInlineUpdate'
 
-const Authors = ({ show, handleError }) => {
+const Authors = ({ show, handleError, token }) => {
   const authors = useQuery(ALL_AUTHORS)
 
   if (!show) {
@@ -35,10 +35,16 @@ const Authors = ({ show, handleError }) => {
                 {author.born ? (
                   author.born
                 ) : (
-                  <AuthorBirthyearInlineUpdate
-                    author={author}
-                    handleError={handleError}
-                  />
+                  <>
+                    {token ? (
+                      <AuthorBirthyearInlineUpdate
+                        author={author}
+                        handleError={handleError}
+                      />
+                    ) : (
+                      ''
+                    )}
+                  </>
                 )}
               </td>
               <td>{author.bookCount}</td>

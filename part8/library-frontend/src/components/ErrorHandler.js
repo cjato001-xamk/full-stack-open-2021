@@ -1,8 +1,8 @@
 const ErrorHandler = ({ errors }) => {
   return (
     <>
-      {errors.map((error) => (
-        <p>{error.message}</p>
+      {errors.map((error, index) => (
+        <p key={index}>{error.message}</p>
       ))}
     </>
   )

@@ -136,7 +136,7 @@ const resolvers = {
       const book = new Book({
         ...args,
         bookId: newBookId,
-        authorId: newAuthorId,
+        authorId: authorExists ? authorExists.authorId : newAuthorId,
       })
 
       try {
