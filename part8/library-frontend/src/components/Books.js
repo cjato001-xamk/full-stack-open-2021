@@ -5,6 +5,7 @@ import { ALL_BOOKS, ALL_GENRES } from '../graphql/queries'
 
 import { Loading } from './Loading'
 import { GenreSelector } from './GenreSelector'
+import { BooksTable } from './BooksTable'
 
 const Books = ({ show }) => {
   const [selectedGenre, setSelectedGenre] = useState('')
@@ -47,22 +48,7 @@ const Books = ({ show }) => {
         </p>
       )}
 
-      <table>
-        <tbody>
-          <tr>
-            <th></th>
-            <th>author</th>
-            <th>published</th>
-          </tr>
-          {books.map((book) => (
-            <tr key={book.bookId}>
-              <td>{book.title}</td>
-              <td>{book.author.name}</td>
-              <td>{book.published}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <BooksTable books={books} />
 
       {genres.data?.allGenres && (
         <GenreSelector

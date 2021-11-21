@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useApolloClient } from '@apollo/client'
 
 import { Authors } from './components/Authors'
 import { Books } from './components/Books'
 import { NewBook } from './components/NewBook'
+import { RecommendedBooks } from './components/RecommendedBooks'
 import { Login } from './components/Login'
 
 import { ErrorHandler } from './components/ErrorHandler'
@@ -17,6 +18,15 @@ const App = () => {
   const handleError = (error) => {
     setErrors(error)
   }
+
+  // Check possible user token on initial load
+  useEffect(() => {
+    const tokenFromLocalStorage = localStorage.getItem('user-token')
+
+    if (tokenFromLocalStorage) {
+      setToken(tokenFromLocalStorage)
+    }
+  }, [])
 
   const logout = () => {
     setToken(null)
@@ -33,6 +43,7 @@ const App = () => {
         {token && (
           <>
             <button onClick={() => setPage('add')}>add book</button>
+            <button onClick={() => setPage('recommended')}>recommended</button>
             <button onClick={() => logout()}>logout</button>
           </>
         )}
@@ -52,6 +63,11 @@ const App = () => {
         show={page === 'add'}
         handleError={handleError}
         setPage={setPage}
+      />
+
+      <RecommendedBooks
+        show={page === 'recommended'}
+        handleError={handleError}
       />
 
       <Login

@@ -32,4 +32,14 @@ const ALL_GENRES = gql`
   }
 `
 
-export { ALL_AUTHORS, ALL_BOOKS, ALL_GENRES }
+const ME = gql`
+  query {
+    me {
+      id
+      username
+      favoriteGenre
+    }
+  }
+`
+
+export { ALL_AUTHORS, ALL_BOOKS, ALL_GENRES, ME }
