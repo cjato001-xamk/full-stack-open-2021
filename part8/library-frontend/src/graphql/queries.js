@@ -12,8 +12,8 @@ const ALL_AUTHORS = gql`
 `
 
 const ALL_BOOKS = gql`
-  query {
-    allBooks {
+  query allBooks($genre: String) {
+    allBooks(genre: $genre) {
       bookId
       title
       author {
@@ -21,8 +21,15 @@ const ALL_BOOKS = gql`
         name
       }
       published
+      genres
     }
   }
 `
 
-export { ALL_AUTHORS, ALL_BOOKS }
+const ALL_GENRES = gql`
+  query {
+    allGenres
+  }
+`
+
+export { ALL_AUTHORS, ALL_BOOKS, ALL_GENRES }
