@@ -15,6 +15,13 @@ const ADD_BOOK = gql`
     ) {
       bookId
       title
+      author {
+        authorId
+        name
+        born
+      }
+      published
+      genres
     }
   }
 `

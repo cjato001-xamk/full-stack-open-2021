@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
 
-import { ALL_BOOKS, ALL_AUTHORS } from '../graphql/queries'
+import { ALL_BOOKS, ALL_AUTHORS, ALL_GENRES } from '../graphql/queries'
 import { ADD_BOOK } from '../graphql/mutations'
 
 const NewBook = ({ show, handleError, setPage }) => {
@@ -12,7 +12,16 @@ const NewBook = ({ show, handleError, setPage }) => {
   const [genres, setGenres] = useState([])
 
   const [addBook] = useMutation(ADD_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+    refetchQueries: [
+      { query: ALL_AUTHORS },
+      { query: ALL_GENRES },
+      { query: ALL_BOOKS },
+      { query: ALL_BOOKS, variables: { genre: '' } },
+      ...genres.map((genre) => ({
+        query: ALL_BOOKS,
+        variables: { genre: genre },
+      })),
+    ],
     onError: (error) => {
       handleError(error.graphQLErrors)
     },
