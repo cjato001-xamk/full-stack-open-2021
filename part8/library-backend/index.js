@@ -3,16 +3,24 @@ import {
   gql,
   UserInputError,
   AuthenticationError,
-} from 'apollo-server'
+} from 'apollo-server-express'
+import express from 'express'
 import { v4 as uuid } from 'uuid'
 import mongoose from 'mongoose'
 import {} from 'dotenv/config'
 import jwt from 'jsonwebtoken'
+import { createServer } from 'http'
+import { execute, subscribe } from 'graphql'
+import { SubscriptionServer } from 'subscriptions-transport-ws'
+import { makeExecutableSchema } from '@graphql-tools/schema'
+import { PubSub } from 'graphql-subscriptions'
 
 import { seedDB } from './helpers/init.js'
 import { Author } from './models/author.js'
 import { Book } from './models/book.js'
 import { User } from './models/user.js'
+
+const pubsub = new PubSub()
 
 const typeDefs = gql`
   type Author {
@@ -59,6 +67,10 @@ const typeDefs = gql`
     editAuthor(authorId: String!, setBornTo: Int!): Author
     createUser(username: String!, favoriteGenre: String!): User
     login(username: String!, password: String!): Token
+  }
+
+  type Subscription {
+    bookAdded: Book
   }
 `
 
@@ -148,6 +160,10 @@ const resolvers = {
 
       try {
         await book.save()
+
+        pubsub.publish('BOOK_ADDED', {
+          bookAdded: book,
+        })
       } catch (error) {
         throw new UserInputError(error.message, { args })
       }
@@ -205,11 +221,44 @@ const resolvers = {
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
     },
   },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED']),
+    },
+  },
 }
 
+// Integrate Apollo Server with Express
+// in order to enable subscriptions
+const app = express()
+const httpServer = createServer(app)
+const schema = makeExecutableSchema({ typeDefs, resolvers })
+
+const subscriptionServer = SubscriptionServer.create(
+  {
+    schema,
+    execute,
+    subscribe,
+  },
+  {
+    server: httpServer,
+    path: '/graphql',
+  }
+)
+
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema,
+  plugins: [
+    {
+      async serverWillStart() {
+        return {
+          async drainServer() {
+            subscriptionServer.close()
+          },
+        }
+      },
+    },
+  ],
   context: async ({ req }) => {
     const auth = req ? req.headers.authorization : null
 
@@ -219,6 +268,16 @@ const server = new ApolloServer({
 
       return { currentUser }
     }
+  },
+})
+
+// More required logic for integrating with Express
+await server.start()
+server.applyMiddleware({
+  app,
+  cors: {
+    origin: 'http://localhost:3000',
+    credentials: true,
   },
 })
 
@@ -232,10 +291,12 @@ mongoose
     // Seed database with sample data if it's empty
     seedDB()
 
-    server.listen().then(({ url }) => {
-      console.log(`ApolloServer ready at ${url}.`)
+    httpServer.listen(4000, () => {
+      console.log(
+        `Apollo Server ready at http://localhost:4000${server.graphqlPath}`
+      )
     })
   })
   .catch((error) => {
-    console.log('Error while connecting to MongoDB:', error.message)
+    console.log('Databse or server failed to start:', error.message)
   })
