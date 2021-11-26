@@ -18,7 +18,7 @@ const RecommendedBooks = ({ show, handleError }) => {
       getBooks({ variables: { genre: me.data.me.favoriteGenre } })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [me])
+  }, [me.data])
 
   useEffect(() => {
     setBooks(booksData ? booksData.allBooks : [])
