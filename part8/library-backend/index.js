@@ -162,7 +162,7 @@ const resolvers = {
         await book.save()
 
         pubsub.publish('BOOK_ADDED', {
-          bookAdded: book,
+          bookAdded: book.populate('author'),
         })
       } catch (error) {
         throw new UserInputError(error.message, { args })
