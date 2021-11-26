@@ -6,8 +6,8 @@ import { Books } from './components/Books'
 import { NewBook } from './components/NewBook'
 import { RecommendedBooks } from './components/RecommendedBooks'
 import { Login } from './components/Login'
-
 import { ErrorHandler } from './components/ErrorHandler'
+import { NotifyNewBooks } from './components/NotifyNewBooks'
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -50,6 +50,8 @@ const App = () => {
       </div>
 
       {errors.length !== 0 && <ErrorHandler errors={errors} />}
+
+      <NotifyNewBooks setPage={setPage} />
 
       <Authors
         show={page === 'authors'}
