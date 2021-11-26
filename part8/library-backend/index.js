@@ -276,7 +276,18 @@ await server.start()
 server.applyMiddleware({
   app,
   cors: {
-    origin: 'http://localhost:3000',
+    origin: (origin, callback) => {
+      const whitelist = [
+        'http://localhost:3000',
+        'https://studio.apollographql.com',
+      ]
+
+      if (whitelist.indexOf(origin) !== -1) {
+        callback(null, true)
+      } else {
+        callback(new Error('Not allowed by CORS.'))
+      }
+    },
     credentials: true,
   },
 })
