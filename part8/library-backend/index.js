@@ -14,6 +14,7 @@ import { execute, subscribe } from 'graphql'
 import { SubscriptionServer } from 'subscriptions-transport-ws'
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import { PubSub } from 'graphql-subscriptions'
+import DataLoader from 'dataloader'
 
 import { seedDB } from './helpers/init.js'
 import { Author } from './models/author.js'
@@ -76,9 +77,8 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    bookCount: async () => {
-      return await Book.find({}).countDocuments()
-    },
+    bookCount: ({ bookId }, _args, { loaders }) =>
+      loaders.bookCountLoader.load(bookId),
     authorCount: async () => {
       return await Author.find({}).countDocuments()
     },
@@ -261,12 +261,25 @@ const server = new ApolloServer({
   ],
   context: async ({ req }) => {
     const auth = req ? req.headers.authorization : null
+    let currentUser = null
 
     if (auth && auth.toLowerCase().startsWith('bearer ')) {
       const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET)
-      const currentUser = await User.findOne({ userId: decodedToken.userId })
+      currentUser = await User.findOne({ userId: decodedToken.userId })
+    }
 
-      return { currentUser }
+    const bookCountLoader = new DataLoader((bookIds) => {
+      return Book.find({ bookId: { $in: bookIds } }).then((books) => {
+        const booksByBookId = _.keyBy(books, 'bookId')
+        return bookIds.map((bookId) => booksByBookId[bookId])
+      })
+    })
+
+    return {
+      currentUser,
+      loaders: {
+        bookCountLoader,
+      },
     }
   },
 })
