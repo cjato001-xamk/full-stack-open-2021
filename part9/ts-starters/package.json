@@ -1,0 +1,13 @@
+{
+  "name": "bmi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "calculateBmi": "ts-node bmiCalculator.ts"
+  },
+  "dependencies": {
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.2"
+  }
+}
