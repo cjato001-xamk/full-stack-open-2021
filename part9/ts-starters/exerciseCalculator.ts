@@ -90,9 +90,11 @@ const parseArguments = (args: string[]) => {
   }
 };
 
-try {
-  const { target, dailyExercices } = parseArguments(process.argv.slice(2));
-  console.log(calculateExercises(dailyExercices, target));
-} catch (error) {
-  console.log('Failed:' + error.message);
+if (process.argv.length > 2) {
+  try {
+    const { target, dailyExercices } = parseArguments(process.argv.slice(2));
+    console.log(calculateExercises(dailyExercices, target));
+  } catch (error) {
+    console.log('Failed:' + error.message);
+  }
 }

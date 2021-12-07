@@ -12,11 +12,28 @@ const calculateBmi = (height: number, weight: number): string => {
   return 'Normal (healthy weight)';
 };
 
-const height = +process.argv[2];
-const weight = +process.argv[3];
+const parseArguments = (args: string[]) => {
+  if (args.length !== 2) throw new Error('Invalid arguments!');
 
-if (!height || !weight) {
-  throw new Error('Invalid input!');
+  const [height, weight] = args;
+
+  if (!isNaN(Number(height)) && !isNaN(Number(weight))) {
+    return {
+      height: +height,
+      weight: +weight,
+    };
+  } else {
+    throw new Error('Provided values were not numbers!');
+  }
+};
+
+if (process.argv.length > 2) {
+  try {
+    const { height, weight } = parseArguments(process.argv.slice(2));
+    console.log(calculateBmi(height, weight));
+  } catch (error) {
+    console.log('Failed:' + error.message);
+  }
 }
 
-console.log(calculateBmi(height, weight));
+export { calculateBmi };
