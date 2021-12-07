@@ -104,3 +104,5 @@ if (process.argv.length > 2) {
     console.log(errorMessage);
   }
 }
+
+export { calculateExercises };
