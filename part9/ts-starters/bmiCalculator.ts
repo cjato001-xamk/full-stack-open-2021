@@ -12,9 +12,11 @@ const calculateBmi = (height: number, weight: number): string => {
   return 'Normal (healthy weight)';
 };
 
-/**
- * Expected return
- *
- * Normal (healthy weight)
- */
-console.log(calculateBmi(180, 74));
+const height = +process.argv[2];
+const weight = +process.argv[3];
+
+if (!height || !weight) {
+  throw new Error('Invalid input!');
+}
+
+console.log(calculateBmi(height, weight));

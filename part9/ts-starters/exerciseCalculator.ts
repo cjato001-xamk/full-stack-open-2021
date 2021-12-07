@@ -30,7 +30,10 @@ const getRating = (
   }
 
   const descriptionMap: { [key: number]: string } = {
+    0: 'Grrr.',
     2: 'Not too bad but, could be better!',
+    4: 'Jei!',
+    6: 'WOW!',
   };
 
   return { rating, ratingDescription: descriptionMap[rating] };
@@ -64,17 +67,32 @@ const calculateExercises = (
   };
 };
 
-/**
- * Expected return
- *
- * {
- *   periodLength: 7,
- *   trainingDays: 5,
- *   success: false,
- *   rating: 2,
- *   ratingDescription: 'not too bad but could be better',
- *   target: 2,
- *   average: 1.9285714285714286
- * }
- */
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+const parseArguments = (args: string[]) => {
+  if (args.length < 2) throw new Error('Not enough arguments!');
+
+  const [target, ...dailyExercices] = args;
+
+  const parsedDailyExercices = dailyExercices.map((value) => {
+    const number = +value;
+    if (isNaN(number)) {
+      throw new Error('Invalid input!');
+    }
+    return +value;
+  });
+
+  if (!isNaN(Number(target))) {
+    return {
+      target: +target,
+      dailyExercices: parsedDailyExercices,
+    };
+  } else {
+    throw new Error('Provided values were not numbers!');
+  }
+};
+
+try {
+  const { target, dailyExercices } = parseArguments(process.argv.slice(2));
+  console.log(calculateExercises(dailyExercices, target));
+} catch (error) {
+  console.log('Failed:' + error.message);
+}
