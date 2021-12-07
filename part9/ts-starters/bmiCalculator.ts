@@ -30,9 +30,15 @@ const parseArguments = (args: string[]) => {
 if (process.argv.length > 2) {
   try {
     const { height, weight } = parseArguments(process.argv.slice(2));
+    // eslint-disable-next-line no-console
     console.log(calculateBmi(height, weight));
-  } catch (error) {
-    console.log('Failed:' + error.message);
+  } catch (error: unknown) {
+    let errorMessage = 'Something went wrong.';
+    if (error instanceof Error) {
+      errorMessage += ' Error: ' + error.message;
+    }
+    // eslint-disable-next-line no-console
+    console.log(errorMessage);
   }
 }
 

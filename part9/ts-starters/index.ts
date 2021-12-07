@@ -10,7 +10,7 @@ app.get('/hello', (_req, res) => {
 });
 
 app.get('/bmi', (req, res) => {
-  let { height, weight }: any = req.query;
+  const { height, weight } = req.query;
 
   if (!height || !weight || isNaN(Number(height)) || isNaN(Number(weight))) {
     return res.json({
@@ -18,7 +18,7 @@ app.get('/bmi', (req, res) => {
     });
   }
 
-  const bmi = calculateBmi(height, weight);
+  const bmi = calculateBmi(Number(height), Number(weight));
 
   return res.json({
     weight,
@@ -30,5 +30,6 @@ app.get('/bmi', (req, res) => {
 const PORT = 3002;
 
 app.listen(PORT, () => {
+  // eslint-disable-next-line no-console
   console.log(`Server running on port ${PORT}`);
 });
