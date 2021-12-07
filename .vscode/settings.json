@@ -1,6 +1,7 @@
 {
   "eslint.workingDirectories": [
     "./part9/ts-starters",
-    "./part9/patientor-backend"
+    "./part9/patientor-backend",
+    "./part9/patientor-frontend"
   ]
 }
