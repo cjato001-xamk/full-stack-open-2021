@@ -1,3 +1,6 @@
 {
-  "eslint.workingDirectories": ["./part9/ts-starters"]
+  "eslint.workingDirectories": [
+    "./part9/ts-starters",
+    "./part9/patientor-backend"
+  ]
 }
