@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 
 import { diagnosesRouter } from './routes/diagnoses';
+import { patientsRouter } from './routes/patients';
 
 const app = express();
 app.use(express.json());
@@ -19,6 +20,7 @@ app.get('/api/ping', (_req: Request, res: Response) => {
 });
 
 app.use('/api/diagnoses', diagnosesRouter);
+app.use('/api/patients', patientsRouter);
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
