@@ -1,3 +1,5 @@
+import { Gender } from './Gender';
+
 type SensitivePatientFields = 'ssn';
 
 export interface Patient {
@@ -5,8 +7,10 @@ export interface Patient {
   name: string;
   dateOfBirth: string;
   ssn: string;
-  gender: string;
+  gender: Gender;
   occupation: string;
 }
 
 export type PatientWithoutSensitiveData = Omit<Patient, SensitivePatientFields>;
+
+export type NewPatient = Omit<Patient, 'id'>;

@@ -7,3 +7,17 @@ GET http://localhost:3001/api/diagnoses
 ###
 
 GET http://localhost:3001/api/patients
+
+###
+
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "ssn": "220263-9944",
+  "dateOfBirth": "1963-02-22",
+  "occupation": "Plumber",
+  "gender": "male"
+}
+
