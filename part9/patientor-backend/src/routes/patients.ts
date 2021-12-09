@@ -9,6 +9,10 @@ patientsRouter.get('/', (_req, res) => {
   res.send(patientsService.getPatientsWithoutSensitiveData());
 });
 
+patientsRouter.get('/:id', (req, res) => {
+  res.send(patientsService.getPatientWithoutSensitiveData(req.params.id));
+});
+
 patientsRouter.post('/', (req, res) => {
   try {
     const newPatient = unsafeBodyToNewPatient(req.body);

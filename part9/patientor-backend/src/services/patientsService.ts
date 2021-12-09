@@ -8,18 +8,28 @@ import {
 } from '../../types/Patient';
 
 const getPatientsWithoutSensitiveData = (): PatientWithoutSensitiveData[] => {
-  return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
-    id,
-    name,
-    dateOfBirth,
-    gender,
-    occupation,
-  }));
+  return patients.map(
+    ({ id, name, dateOfBirth, gender, occupation, entries }) => ({
+      id,
+      name,
+      dateOfBirth,
+      gender,
+      occupation,
+      entries,
+    })
+  );
+};
+
+const getPatientWithoutSensitiveData = (
+  patientId: string
+): PatientWithoutSensitiveData | undefined => {
+  return patients.find((patient) => patient.id === patientId);
 };
 
 const addPatient = (patient: NewPatient): Patient => {
   const newPatient = {
     id: uuid(),
+    entries: [],
     ...patient,
   };
 
@@ -29,5 +39,6 @@ const addPatient = (patient: NewPatient): Patient => {
 
 export const patientsService = {
   getPatientsWithoutSensitiveData,
+  getPatientWithoutSensitiveData,
   addPatient,
 };
