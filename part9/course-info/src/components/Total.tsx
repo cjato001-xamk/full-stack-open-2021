@@ -1,7 +1,7 @@
-import { ICoursePart } from '../../types/CoursePart';
+import { CoursePart } from '../../types/CoursePart';
 
 interface TotalProps {
-  courseParts: ICoursePart[];
+  courseParts: CoursePart[];
 }
 
 const Total = ({ courseParts }: TotalProps) => {

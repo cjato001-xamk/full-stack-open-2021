@@ -1,16 +1,16 @@
-import { ICoursePart } from '../../types/CoursePart';
+import { CoursePart } from '../../types/CoursePart';
 
-import { CoursePart } from './CoursePart';
+import { Part } from './Part';
 
 interface ContentProps {
-  courseParts: ICoursePart[];
+  courseParts: CoursePart[];
 }
 
 const Content = ({ courseParts }: ContentProps) => {
   return (
     <>
       {courseParts.map((coursePart) => (
-        <CoursePart coursePart={coursePart} key={coursePart.name} />
+        <Part coursePart={coursePart} key={coursePart.name} />
       ))}
     </>
   );
