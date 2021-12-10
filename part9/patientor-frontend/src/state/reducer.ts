@@ -7,7 +7,7 @@ export type Action =
       payload: Patient[];
     }
   | {
-      type: 'ADD_PATIENT';
+      type: 'ADD_OR_UPDATE_PATIENT';
       payload: Patient;
     };
 
@@ -24,7 +24,7 @@ export const reducer = (state: State, action: Action): State => {
           ...state.patients,
         },
       };
-    case 'ADD_PATIENT':
+    case 'ADD_OR_UPDATE_PATIENT':
       return {
         ...state,
         patients: {

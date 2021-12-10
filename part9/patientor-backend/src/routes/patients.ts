@@ -10,7 +10,7 @@ patientsRouter.get('/', (_req, res) => {
 });
 
 patientsRouter.get('/:id', (req, res) => {
-  res.send(patientsService.getPatientWithoutSensitiveData(req.params.id));
+  res.send(patientsService.getPatient(req.params.id));
 });
 
 patientsRouter.post('/', (req, res) => {

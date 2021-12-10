@@ -20,9 +20,7 @@ const getPatientsWithoutSensitiveData = (): PatientWithoutSensitiveData[] => {
   );
 };
 
-const getPatientWithoutSensitiveData = (
-  patientId: string
-): PatientWithoutSensitiveData | undefined => {
+const getPatient = (patientId: string): Patient | undefined => {
   return patients.find((patient) => patient.id === patientId);
 };
 
@@ -39,6 +37,6 @@ const addPatient = (patient: NewPatient): Patient => {
 
 export const patientsService = {
   getPatientsWithoutSensitiveData,
-  getPatientWithoutSensitiveData,
+  getPatient,
   addPatient,
 };
