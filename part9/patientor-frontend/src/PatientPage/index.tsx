@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
@@ -31,7 +31,7 @@ const PatientPage = () => {
 
     // If patient data does not have sensitive data,
     // then fetch full data from api
-    if (!patients[id].ssn) {
+    if (!patients[id]?.ssn) {
       void fetchPatientData();
     }
   }, [id, dispatch]);
@@ -48,6 +48,23 @@ const PatientPage = () => {
         <li>SSN: {patients[id].ssn}</li>
         <li>Occupation: {patients[id].occupation}</li>
       </ul>
+
+      <h4>Entries</h4>
+
+      {patients[id].entries?.map((entry) => (
+        <React.Fragment key={entry.date}>
+          <p>
+            {entry.date}{' '}
+            <span style={{ fontStyle: 'italic' }}>{entry.description}</span>
+          </p>
+
+          <ul>
+            {entry.diagnosisCodes?.map((diagnosisCode) => (
+              <li key={diagnosisCode}>{diagnosisCode}</li>
+            ))}
+          </ul>
+        </React.Fragment>
+      ))}
     </>
   );
 };
