@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { Item } from 'semantic-ui-react';
 
 import { apiBaseUrl } from '../constants';
 import { useStateValue, addOrUpdatePatient } from '../state';
 import { Patient } from '../types';
 
 import { GenderIcon } from '../components/GenderIcon';
+import { EntryDetails } from '../components/EntryDetails';
 
 interface RouteParamProps {
   id: string;
@@ -15,7 +17,7 @@ interface RouteParamProps {
 const PatientPage = () => {
   const { id } = useParams<RouteParamProps>();
 
-  const [{ patients, diagnoses }, dispatch] = useStateValue();
+  const [{ patients }, dispatch] = useStateValue();
 
   useEffect(() => {
     const fetchPatientData = async () => {
@@ -36,14 +38,6 @@ const PatientPage = () => {
     }
   }, [id, dispatch]);
 
-  const getDiagnosisName = (code: string) => {
-    const diagnosis = diagnoses.find((d) => d.code === code);
-
-    if (diagnosis) {
-      return diagnosis.name;
-    }
-  };
-
   if (!id || Object.keys(patients).length === 0) return null;
 
   return (
@@ -57,24 +51,19 @@ const PatientPage = () => {
         <li>Occupation: {patients[id].occupation}</li>
       </ul>
 
-      <h4>Entries</h4>
+      {patients[id]?.entries?.length !== 0 && (
+        <>
+          <h4>Entries</h4>
 
-      {patients[id].entries?.map((entry) => (
-        <React.Fragment key={entry.date}>
-          <p>
-            {entry.date}{' '}
-            <span style={{ fontStyle: 'italic' }}>{entry.description}</span>
-          </p>
-
-          <ul>
-            {entry.diagnosisCodes?.map((diagnosisCode) => (
-              <li key={diagnosisCode}>
-                {diagnosisCode} {getDiagnosisName(diagnosisCode)}
-              </li>
+          <Item.Group>
+            {patients[id].entries?.map((entry) => (
+              <Item key={entry.date}>
+                <EntryDetails entry={entry} />
+              </Item>
             ))}
-          </ul>
-        </React.Fragment>
-      ))}
+          </Item.Group>
+        </>
+      )}
     </>
   );
 };
