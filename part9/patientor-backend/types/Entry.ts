@@ -1,4 +1,4 @@
-import { Diagnose } from './Diagnose';
+import { Diagnosis } from './Diagnosis';
 import { HealthCheckRating } from './HealthCheckRating';
 
 interface BaseEntry {
@@ -6,7 +6,7 @@ interface BaseEntry {
   description: string;
   date: string;
   specialist: string;
-  diagnosisCodes?: Diagnose['code'][];
+  diagnosisCodes?: Diagnosis['code'][];
 }
 
 interface HealthCheckEntry extends BaseEntry {

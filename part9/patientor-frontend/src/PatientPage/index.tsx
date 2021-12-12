@@ -15,7 +15,7 @@ interface RouteParamProps {
 const PatientPage = () => {
   const { id } = useParams<RouteParamProps>();
 
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients, diagnoses }, dispatch] = useStateValue();
 
   useEffect(() => {
     const fetchPatientData = async () => {
@@ -35,6 +35,14 @@ const PatientPage = () => {
       void fetchPatientData();
     }
   }, [id, dispatch]);
+
+  const getDiagnosisName = (code: string) => {
+    const diagnosis = diagnoses.find((d) => d.code === code);
+
+    if (diagnosis) {
+      return diagnosis.name;
+    }
+  };
 
   if (!id || Object.keys(patients).length === 0) return null;
 
@@ -60,7 +68,9 @@ const PatientPage = () => {
 
           <ul>
             {entry.diagnosisCodes?.map((diagnosisCode) => (
-              <li key={diagnosisCode}>{diagnosisCode}</li>
+              <li key={diagnosisCode}>
+                {diagnosisCode} {getDiagnosisName(diagnosisCode)}
+              </li>
             ))}
           </ul>
         </React.Fragment>
