@@ -1,19 +1,24 @@
+# Ping -> Pong
 GET http://localhost:3001/ping
 
 ###
 
+# Get all diagnoses
 GET http://localhost:3001/api/diagnoses
 
 ###
 
+# Get all patients
 GET http://localhost:3001/api/patients
 
 ###
 
+# Get single patient by patient id
 GET http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667
 
 ###
 
+# Add new patient
 POST http://localhost:3001/api/patients
 Content-Type: application/json
 
@@ -23,4 +28,56 @@ Content-Type: application/json
   "dateOfBirth": "1963-02-22",
   "occupation": "Plumber",
   "gender": "male"
+}
+
+###
+
+# Add new Hospital entry to patient
+POST http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+  "type": "Hospital",
+  "description": "Broken arm",
+  "date": "2021-12-15",
+  "specialist": "Dr. Rosenbaum",
+  "diagnosisCodes": ["M24.2"],
+  "discharge": {
+    "date": "2021-12-15",
+    "criteria": "Arm fixed"
+  }
+}
+
+###
+
+# Add new OccupationalHealthCare entry to patient
+POST http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+  "type": "OccupationalHealthCare",
+  "description": "Does not feel like working",
+  "date": "2021-12-16",
+  "specialist": "Dr. Sickleave",
+  "diagnosisCodes": ["F43.2"],
+  "employerName": "WorkPlace Oyj",
+  "sickLeave": {
+    "startDate": "2021-12-16",
+    "endDate": "2022-12-16"
+  }
+}
+
+###
+
+# Add new HealthCheck entry to patient
+POST http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+  "type": "HealthCheck",
+  "description": "Daily control",
+  "date": "2021-12-14",
+  "specialist": "Dr. Itchy",
+  "diagnosisCodes": ["H54.7", "L20", "S62.5"],
+  "healthCheckRating": "2"
 }
