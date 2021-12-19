@@ -4,6 +4,7 @@ import { Gender } from '../types/Gender';
 import { EntryDischarge, EntrySickLeave, EntryType } from '../types/Entry';
 import {
   isString,
+  isInteger,
   isArray,
   isDate,
   isGender,
@@ -125,9 +126,9 @@ export const parseEmployerName = (employerName: unknown): string => {
 };
 
 export const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
-  if (!rating || !isString(rating) || !isHealthCheckRating(parseInt(rating))) {
+  if (!rating || !isInteger(rating) || !isHealthCheckRating(rating)) {
     throw new Error(`Incorrect or missing rating: ${rating}.`);
   }
 
-  return parseInt(rating);
+  return rating;
 };

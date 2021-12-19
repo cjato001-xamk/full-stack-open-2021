@@ -6,6 +6,10 @@ export const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
 };
 
+export const isInteger = (number: unknown): number is number => {
+  return Number.isInteger(number);
+};
+
 export const isArray = (data: unknown): data is string[] => {
   return data instanceof Array;
 };
