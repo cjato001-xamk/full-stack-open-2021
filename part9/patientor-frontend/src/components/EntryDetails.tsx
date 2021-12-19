@@ -1,7 +1,7 @@
 import { Item, Icon } from 'semantic-ui-react';
 
 import { useStateValue } from '../state';
-import { Entry } from '../types';
+import { Entry, EntryType } from '../types';
 
 import HealthRatingBar from './HealthRatingBar';
 
@@ -48,7 +48,7 @@ const EntryDetails = ({ entry }: EntryDetailsProps) => {
   };
 
   switch (entry.type) {
-    case 'Hospital':
+    case EntryType.Hospital:
       return (
         <>
           <Item.Image size='small'>
@@ -60,7 +60,7 @@ const EntryDetails = ({ entry }: EntryDetailsProps) => {
           </Item.Content>
         </>
       );
-    case 'OccupationalHealthCare':
+    case EntryType.OccupationalHealthCare:
       return (
         <>
           <Item.Image size='small'>
@@ -72,7 +72,7 @@ const EntryDetails = ({ entry }: EntryDetailsProps) => {
           </Item.Content>
         </>
       );
-    case 'HealthCheck':
+    case EntryType.HealthCheck:
       return (
         <>
           <Item.Image size='small'>

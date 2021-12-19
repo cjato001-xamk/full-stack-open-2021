@@ -22,6 +22,7 @@ const App = () => {
         );
         dispatch(setPatientList(patientListFromApi));
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.error(e);
       }
     };
@@ -34,6 +35,7 @@ const App = () => {
         );
         dispatch(setDiagnosisList(diagnosesListFromApi));
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.error(e);
       }
     };
