@@ -48,7 +48,7 @@ const unsafeBodyToNewEntry = ({
 
     case EntryType.OccupationalHealthCare:
       entry.employerName = parseEmployerName(employerName);
-      if (entry.sickLeave) {
+      if (sickLeave) {
         entry.sickLeave = parseSickLeave(sickLeave);
       }
       break;
