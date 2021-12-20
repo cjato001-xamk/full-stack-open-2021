@@ -17,6 +17,7 @@ The "Full Stack Open 2021"-course serves as an introduction to modern web applic
 - [x] [Part 6: State management with Redux](https://github.com/cjato001-xamk/full-stack-open-2021/tree/main/part6)
 - [x] [Part 7: React router, custom hooks, styling app with CSS and webpack](https://github.com/cjato001-xamk/full-stack-open-2021/tree/main/part7)
 - [x] [Part 8: GraphQL](https://github.com/cjato001-xamk/full-stack-open-2021/tree/main/part8)
+- [x] [Part 9: TypeScript](https://github.com/cjato001-xamk/full-stack-open-2021/tree/main/part9)
 
 ### Completed exercises
 
@@ -31,10 +32,10 @@ The "Full Stack Open 2021"-course serves as an introduction to modern web applic
 | Part 6 | 21/21     |
 | Part 7 | 21/21     |
 | Part 8 | 26/26     |
+| Part 9 | 27/27     |
 
 ## Remaining parts
 
-- [ ] Part 9: TypeScript
 - [ ] Part 10: React Native
 - [ ] Part 11: CI/CD
 - [ ] Part 12: Containers
