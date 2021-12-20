@@ -2,6 +2,7 @@ import { Item, Icon } from 'semantic-ui-react';
 
 import { useStateValue } from '../state';
 import { Entry, EntryType } from '../types';
+import { assertNever } from '../utils/assertNever';
 
 import HealthRatingBar from './HealthRatingBar';
 
@@ -11,15 +12,6 @@ interface EntryDetailsProps {
 
 const EntryDetails = ({ entry }: EntryDetailsProps) => {
   const [{ diagnoses }] = useStateValue();
-
-  /**
-   * Helper function for exhaustive type checking
-   */
-  const assertNever = (value: never): never => {
-    throw new Error(
-      `Unhandled discriminated union member: ${JSON.stringify(value)}`
-    );
-  };
 
   const getDiagnosisName = (code: string) => {
     const diagnosis = diagnoses.find((d) => d.code === code);
@@ -57,6 +49,10 @@ const EntryDetails = ({ entry }: EntryDetailsProps) => {
           <Item.Content>
             <Item.Header>Hospital {entry.date}</Item.Header>
             <Description />
+            <p>
+              Discharged on {entry.discharge.date} due to &quot;
+              {entry.discharge.criteria}&quot;.
+            </p>
           </Item.Content>
         </>
       );
@@ -69,6 +65,12 @@ const EntryDetails = ({ entry }: EntryDetailsProps) => {
           <Item.Content>
             <Item.Header>OccupationalHealthCare {entry.date}</Item.Header>
             <Description />
+            {entry.sickLeave?.startDate && (
+              <p>
+                Patient on sick leave from {entry.sickLeave.startDate} to{' '}
+                {entry.sickLeave.endDate}.
+              </p>
+            )}
           </Item.Content>
         </>
       );
