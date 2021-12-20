@@ -1,8 +1,28 @@
 import { Grid, Button } from 'semantic-ui-react';
 import { Field, Formik, Form } from 'formik';
+import * as Yup from 'yup';
 
 import { TextField, SelectField, GenderOption } from '../components/FormField';
 import { Gender, Patient } from '../types';
+
+const PatientSchema = Yup.object().shape({
+  name: Yup.string().required('Field is required.'),
+  ssn: Yup.string()
+    .trim()
+    // Validates only that the SSN "looks correct" - backend might still complain
+    .matches(/^\d{6}[+\-A]\d{3}[a-zA-Z0-9]$/, 'Invalid format.')
+    .required('Field is required.'),
+  dateOfBirth: Yup.string()
+    .trim()
+    // Regexp grabbed from https://stackoverflow.com/a/22061799 (and modified)
+    // Does not actually validate it's a date, so might still fail on backend
+    .matches(
+      /^(19|20)\d{2}-((0[1-9])|(1[0-2]))-(0[1-9]|[1-2][0-9]|3[0-1])$/,
+      'Invalid format.'
+    )
+    .required('Field is required.'),
+  occupation: Yup.string().required('Field is required.'),
+});
 
 /*
  * use type Patient, but omit id and entries,
@@ -32,23 +52,7 @@ export const AddPatientForm = ({ onSubmit, onCancel }: Props) => {
         gender: Gender.Other,
       }}
       onSubmit={onSubmit}
-      validate={(values) => {
-        const requiredError = 'Field is required';
-        const errors: { [field: string]: string } = {};
-        if (!values.name) {
-          errors.name = requiredError;
-        }
-        if (!values.ssn) {
-          errors.ssn = requiredError;
-        }
-        if (!values.dateOfBirth) {
-          errors.dateOfBirth = requiredError;
-        }
-        if (!values.occupation) {
-          errors.occupation = requiredError;
-        }
-        return errors;
-      }}
+      validationSchema={PatientSchema}
     >
       {({ isValid, dirty }) => {
         return (

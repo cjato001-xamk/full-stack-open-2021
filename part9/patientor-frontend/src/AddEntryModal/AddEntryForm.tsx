@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Grid, Button } from 'semantic-ui-react';
 import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 
 import { useStateValue } from '../state';
 import { NewEntry, EntryType } from '../types';
@@ -12,6 +13,20 @@ import {
   EntryTypeOption,
   TextField,
 } from '../components/FormField';
+
+const EntrySchema = Yup.object().shape({
+  description: Yup.string().required('Field is required.'),
+  date: Yup.string()
+    .trim()
+    // Regexp grabbed from https://stackoverflow.com/a/22061799 (and modified)
+    // Does not actually validate it's a date, so might still fail on backend
+    .matches(
+      /^(20)\d{2}-((0[1-9])|(1[0-2]))-(0[1-9]|[1-2][0-9]|3[0-1])$/,
+      'Invalid format.'
+    )
+    .required('Field is required.'),
+  specialist: Yup.string().required('Field is required.'),
+});
 
 export type EntryFormValues = NewEntry;
 
@@ -43,49 +58,7 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         healthCheckRating: 0,
       }}
       onSubmit={onSubmit}
-      validate={(values) => {
-        const requiredError = 'Field is required';
-        const errors: { [field: string]: string } = {};
-        if (!values.type) {
-          errors.type = requiredError;
-        }
-        if (!values.description) {
-          errors.description = requiredError;
-        }
-        if (!values.date) {
-          errors.date = requiredError;
-        }
-        if (!values.specialist) {
-          errors.specialist = requiredError;
-        }
-        if (values.type === EntryType.HealthCheck) {
-          if (!values.healthCheckRating && values.healthCheckRating !== 0) {
-            errors.healthCheckRating = requiredError;
-          }
-        }
-        // if (values.type === EntryType.Hospital) {
-        //   if (!values.discharge.date) {
-        //     // FIXME: Stupidness required
-        //     (errors.discharge as unknown as EntryDischarge).date =
-        //       requiredError;
-        //   }
-        //   if (!values.discharge.date) {
-        //     // FIXME: Stupidness required
-        //     (errors.discharge as unknown as EntryDischarge).criteria =
-        //       requiredError;
-        //   }
-        // }
-        // if(values.type === EntryType.OccupationalHealthCare) {
-        //   if (values.sickLeave.startDate && !values.sickLeave.endDate) {
-        //     errors.sickLeave.endDate = requiredError;
-        //   }
-        //   if (values.sickLeave.endDate && !values.sickLeave.startDate) {
-        //     errors.sickLeave.startDate = requiredError;
-        //   }
-        // }
-
-        return errors;
-      }}
+      validationSchema={EntrySchema}
     >
       {({
         isValid,
